@@ -2,7 +2,7 @@ import "./style.css";
 import { h, $ } from "./dom";
 import {Neo4jAPI} from "./neo4j_api";
 import {Integer} from "neo4j-driver";
-// import {GameSetup} from "./gameSetup";
+import {GameSetup} from "./gameSetup";
 import { EventsEngine } from "./eventsEngine";
 import {ShowResults} from "./showResults";
 
@@ -70,8 +70,8 @@ async function loadGame(api: Neo4jAPI){
     };
 
     const eventsEngine = new EventsEngine(api)
-    // const gameSetup = new GameSetup(api)
-    // await gameSetup.lightSetup()
+    const gameSetup = new GameSetup(api)
+    await gameSetup.lightSetup()
 
     // Now we can run queries
     queryButton.disabled = false;
