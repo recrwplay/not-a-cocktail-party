@@ -2,6 +2,7 @@ import "./style.css";
 import { h, $ } from "./dom";
 import {Neo4jAPI} from "./neo4j_api";
 import {GameSetup} from "./gameSetup";
+import { EventsEngine } from "./eventsEngine";
 
 
 $(".login-button").addEventListener("click", ()=>{
@@ -38,10 +39,11 @@ async function loadGame(api: Neo4jAPI){
         const result=await api.runCypher(query);
         input.value = "";
         console.log(result)
-        await gameSetup.generate()
+        await eventsEgnine.checkConditions()
     };
 
     const gameSetup = new GameSetup(api)
+    const eventsEgnine = new EventsEngine(api)
     await gameSetup.lightSetup()
 
     queryButton.addEventListener('click', runQuery);

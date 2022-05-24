@@ -14,22 +14,4 @@ export class GameSetup
         await this.api.runCypher(Queries.createLightSwitch)
     }
 
-    public async roomSetup(){
-        if(await this.isLightOn())
-        {
-            await this.api.runCypher(Queries.createSafe)
-            await this.api.runCypher(Queries.createCupboard)
-        }
-    }
-
-    public async isLightOn(){
-        const isLightOnQuery = await this.api.runCypher(Queries.isLightOn)
-        return isLightOnQuery[0][0]
-    }
-
-    public async generate()
-    {
-        await this.roomSetup()
-    }
-
 }
