@@ -40,6 +40,7 @@ async function loadGame(api: Neo4jAPI){
         input.value = "";
         console.log(result)
         await eventsEgnine.checkConditions()
+        addQueryToSidebar(query);
     };
 
     const gameSetup = new GameSetup(api)
@@ -53,4 +54,27 @@ async function loadGame(api: Neo4jAPI){
             runQuery();
         }
     });
+
+    const sidebar = $(".sidebar");
+
+    const addQueryToSidebar = (query: string) => {
+      const rerunButton = h("button", "rerun", "Rerun");
+      rerunButton.addEventListener("click", () => {
+        input.value = query;
+        runQuery();
+      });
+
+      sidebar.append(
+        h("div", "query", 
+          h("p", null, query),
+          rerunButton,
+        ),
+      );
+    };
+
+    const addMessageToSidebar = (message: string) => {
+      sidebar.append(h("p", "message", message));
+    };
+
+    addMessageToSidebar("Hello, world!");
 }
