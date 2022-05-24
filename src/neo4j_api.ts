@@ -15,8 +15,10 @@ export class Neo4jAPI {
         const session = this.driver.session()
         const result = await session.run(query)
 
-        console.log(result.records)
         await session.close()
-        return result.records
+
+        return result.records.map((record)=>{
+            return Array.from(record.values())
+        })
     }
 }

@@ -5,10 +5,20 @@ import {Neo4jAPI} from "./neo4j_api";
 
 $(".login-button").addEventListener("click", ()=>{
     $(".login").style.display="none";
-    loadGame();
+
+    // const url=$<HTMLInputElement>("#login-url").value
+    // const username=$<HTMLInputElement>("#login-username").value
+    // const password=$<HTMLInputElement>("#login-password").value
+
+    const username="neo4j"
+    const password="qK6qOvIBbp6ZI1uXNtiK96l6zirs5VXGMcFJSrrSdrk"
+    const url="neo4j+s://bc90915d.databases.neo4j.io:7687"
+
+    const api = new Neo4jAPI(url, username, password)
+    loadGame(api);
 })
 
-function loadGame(){
+function loadGame(api: Neo4jAPI){
     $(".game-grid").style.display="grid";
     const input = h<HTMLInputElement>("input", "main-input");
     input.placeholder = "match N return N";
@@ -22,23 +32,11 @@ function loadGame(){
 
     $(".bottom-controls").append(resetDatabaseButton, clueButton);
 
-    // const url = "neo4j+s://bc90915d.databases.neo4j.io:7687";
-    // const username = "neo4j";
-    // const password = "qK6qOvIBbp6ZI1uXNtiK96l6zirs5VXGMcFJSrrSdrk";
-    //
-    // const api = new Neo4jAPI(url, username, password)
-    // api.runCypher("MATCH (n) RETURN n");
-    //
-    //
-    // const runQuery = () => {
-    //   const query = input.value;
-    //   alert(query);
-    //   input.value = "";
-    // };
-    const runQuery = () => {
+    const runQuery = async () => {
         const query = input.value;
-        alert(query);
+        const result=await api.runCypher(query);
         input.value = "";
+        console.log(result)
     };
 
 

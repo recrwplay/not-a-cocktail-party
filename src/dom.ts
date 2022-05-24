@@ -9,8 +9,8 @@ export const h = <T extends HTMLElement>(
   return el as T;
 };
 
-export const $ = (selector: string): HTMLDivElement => {
-  const el = document.querySelector<HTMLDivElement>(selector);
+export function $<T extends HTMLElement>(selector: string): T {
+  const el = document.querySelector<T>(selector);
   if (!el) throw new Error("No match for selector " + selector);
   return el;
 };
