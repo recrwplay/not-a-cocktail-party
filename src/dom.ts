@@ -1,6 +1,6 @@
 export const h = <T extends HTMLElement>(
   tag: string,
-  className?: string,
+  className: string | null | undefined,
   ...children: (HTMLElement | string)[]
 ) => {
   const el = document.createElement(tag);

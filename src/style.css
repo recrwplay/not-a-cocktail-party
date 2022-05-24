@@ -39,11 +39,17 @@ body {
   grid-area: cypher-input;
   background-color: beige;
   padding: 15px;
+  display: flex;
 }
 .cypher-input input {
-  width: 100%;
+  flex: 1;
   font-size: 30px;
   font-family: monospace;
+}
+.cypher-input button {
+  flex: 0;
+  font-size: 20px;
+  white-space: nowrap;
 }
 
 .game-display {
