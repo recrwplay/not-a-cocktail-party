@@ -1,0 +1,63 @@
+html,
+body {
+  height: 100vh;
+  width: 100vw;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  margin: 0;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.game-grid {
+  height: 100%;
+  width: 100%;
+  display: grid;
+  grid-template-areas:
+    "cypher-input    sidebar"
+    "game-display    sidebar"
+    "bottom-controls sidebar";
+
+
+  grid-template-columns: 1fr 300px;
+  grid-template-rows: auto 1fr auto;
+}
+
+.sidebar {
+  grid-area: sidebar;
+  background-color: aliceblue;
+}
+
+.cypher-input {
+  grid-area: cypher-input;
+  background-color: beige;
+  padding: 15px;
+}
+.cypher-input input {
+  width: 100%;
+  font-size: 30px;
+  font-family: monospace;
+}
+
+.game-display {
+  grid-area: game-display;
+  background-color: bisque;
+}
+.bottom-controls {
+  grid-area: bottom-controls;
+  padding: 15px;
+  background-color: darkslategrey;
+}
+.bottom-controls button {
+  font-size: 20px;
+}
+.bottom-controls button + button {
+  margin-left: 20px;
+}
