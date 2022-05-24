@@ -4,11 +4,34 @@ import {Neo4jAPI} from "./neo4j_api";
 
 const input = h<HTMLInputElement>("input", "main-input");
 input.placeholder = "match N return N";
-$(".cypher-input").append(input);
+const queryButton = h("button", null, "Run Query");
 
-const resetDatabaseButton = h("button", undefined, "Reset Database");
-const clueButton = h("button", undefined, "Give me a clue");
+
+$(".cypher-input").append(input, queryButton);
+
+const resetDatabaseButton = h("button", null, "Reset Database");
+const clueButton = h("button", null, "Give me a clue");
 
 $(".bottom-controls").append(resetDatabaseButton, clueButton);
-const api = new Neo4jAPI();
+
+const url = "neo4j+s://bc90915d.databases.neo4j.io:7687";
+const username = "neo4j";
+const password = "qK6qOvIBbp6ZI1uXNtiK96l6zirs5VXGMcFJSrrSdrk";
+
+const api = new Neo4jAPI(url, username, password)
 api.runCypher("MATCH (n) RETURN n");
+
+
+const runQuery = () => {
+  const query = input.value;
+  alert(query);
+  input.value = "";
+};
+
+
+queryButton.addEventListener('click', runQuery);
+input.addEventListener('keydown', (e) => {
+  if (e.key === "Enter") {
+    runQuery();
+  }
+});

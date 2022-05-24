@@ -8,11 +8,6 @@ export class Neo4jAPI {
         this.driver = neo4j.driver(url, auth)
     }
 
-    /*private url: string = "neo4j+s://bc90915d.databases.neo4j.io:7687";
-    private username: string = "neo4j";
-    private password: string = "qK6qOvIBbp6ZI1uXNtiK96l6zirs5VXGMcFJSrrSdrk";
-     */
-
     public async runCypher(query:string)
     {
         await this.driver.verifyConnectivity()
