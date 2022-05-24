@@ -1,6 +1,7 @@
 import "./style.css";
 import { h, $ } from "./dom";
 import {Neo4jAPI} from "./neo4j_api";
+import {Integer} from "neo4j-driver";
 import {GameSetup} from "./gameSetup";
 import { EventsEngine } from "./eventsEngine";
 import {ShowResults} from "./showResults";
@@ -24,9 +25,9 @@ $(".login-button").addEventListener("click", ()=>{
 async function loadGame(api: Neo4jAPI){
     $(".game-grid").style.display="grid";
     const input = h<HTMLInputElement>("input", "main-input");
-    input.placeholder = "match N return N";
-    const queryButton = h("button", null, "Run Query");
-
+    input.value = "match (n) return n";
+    const queryButton = h<HTMLButtonElement>("button", null, "Run Query");
+    queryButton.disabled = true; // Disable queries until db has been set up
 
     $(".cypher-input").append(input, queryButton);
 
@@ -39,20 +40,41 @@ async function loadGame(api: Neo4jAPI){
       try {
         const query = input.value;
         const result=await api.runCypher(query);
-        input.value = "match (n) return n";
         console.log(result)
-        const showResults = new ShowResults()
-        $(".game-display").append(showResults.makeTableFrom(result));
+        input.value = "";
+
+        const display = $(".game-display");
+        while (display.firstChild) display.firstChild.remove();
+
+        if (result.length > 0) {
+          const { nodes, relationships, rawStrings } = parseNeo4jResponse(result);
+
+          const showResults = new ShowResults()
+
+          if (nodes.length)         display.append(h("pre", null, showResults.makeTableFrom(nodes)));
+          if (relationships.length) display.append(h("pre", null, showResults.makeTableFrom(relationships)));
+          if (rawStrings.length)    display.append(h("pre", null, JSON.stringify(rawStrings, null, '  ')));
+        } else {
+          display.append(
+              h("p", null, "There seems to be nothing here")
+          );
+        }
+          
+        // TODO: Display event messages
         await eventsEngine.checkConditions()
         addQueryToSidebar(query);
       } catch (error) {
         addErrorToSidebar(error as Error);
+        console.error(error);
       }
     };
 
-    const gameSetup = new GameSetup(api)
     const eventsEngine = new EventsEngine(api)
+    const gameSetup = new GameSetup(api)
     await gameSetup.lightSetup()
+
+    // Now we can run queries
+    queryButton.disabled = false;
 
     queryButton.addEventListener('click', runQuery);
 
@@ -88,4 +110,43 @@ async function loadGame(api: Neo4jAPI){
     }
 
     addMessageToSidebar("Hello, world!");
+    addQueryToSidebar("MATCH (l:LightSwitch) SET l.on = true");
+}
+
+
+const parseNeo4jResponse = (result: any[][]) => {
+  const nodes = [];
+  const relationships = [];
+  const rawStrings = [];
+
+  for (const group of result) {
+      for (const item of group) {
+          if (typeof item === 'string') {
+              rawStrings.push(item);
+          } else {
+            // Assume it's either a node or relationship
+            if (item.__isRelationship__) {
+              relationships.push({
+                  type: item.type,
+                  ...item.properties,
+                  id: item.identity.low,
+                  start: item.start.low,
+                  end: item.end.low,
+              })
+            } else if (item.__isNode__) {
+              nodes.push({
+                  labels: item.labels.join(', '),
+                  ...item.properties,
+                  id: item.identity.low,
+              });
+            }
+          }
+      }
+  }
+
+  return {
+    nodes,
+    relationships,
+    rawStrings,
+  }
 }
