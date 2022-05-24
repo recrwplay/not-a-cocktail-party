@@ -3,6 +3,7 @@ import { h, $ } from "./dom";
 import {Neo4jAPI} from "./neo4j_api";
 import {GameSetup} from "./gameSetup";
 import { EventsEngine } from "./eventsEngine";
+import {ShowResults} from "./showResults";
 
 
 $(".login-button").addEventListener("click", ()=>{
@@ -38,9 +39,11 @@ async function loadGame(api: Neo4jAPI){
       try {
         const query = input.value;
         const result=await api.runCypher(query);
-        input.value = "";
+        input.value = "match (n) return n";
         console.log(result)
-        await eventsEgnine.checkConditions()
+        const showResults = new ShowResults()
+        $(".game-display").append(showResults.makeTableFrom(result));
+        await eventsEngine.checkConditions()
         addQueryToSidebar(query);
       } catch (error) {
         addErrorToSidebar(error as Error);
@@ -48,7 +51,7 @@ async function loadGame(api: Neo4jAPI){
     };
 
     const gameSetup = new GameSetup(api)
-    const eventsEgnine = new EventsEngine(api)
+    const eventsEngine = new EventsEngine(api)
     await gameSetup.lightSetup()
 
     queryButton.addEventListener('click', runQuery);
