@@ -46,7 +46,6 @@ export class EventsEngine {
                 notRunEvents.push(event)
             }
         }
-        console.log(notRunEvents)
         this.events=notRunEvents;
     }
 
@@ -54,10 +53,7 @@ export class EventsEngine {
     public async runConditions(conditions:Array<string>): Promise<boolean>{
         const results=await Promise.all(conditions.map(async (query)=>{
             const result=await this.api.runCypher(query)
-            //console.log(result)
-            const res = result.length == 0 ? false : result[0][0] as boolean
-            console.log(res, query)
-            return res
+            return result[0][0] as boolean
         }))
         return results.every((c)=>{
             return c===true

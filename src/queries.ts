@@ -33,4 +33,8 @@ export const Queries =
         MATCH (b:Box)
         MERGE (:KEY {description:"This man's treasure. Opens the safe"})-[:IN]->(b)`,
          */
+    ,
+
+    //Update objects
+    updateLightSwitchDesc: `MATCH (l:LightSwitch) SET l.description = 'A light switch to turn the room light on or off. This much you have figured out...'`
 }
