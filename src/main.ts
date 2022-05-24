@@ -24,9 +24,9 @@ $(".login-button").addEventListener("click", ()=>{
 async function loadGame(api: Neo4jAPI){
     $(".game-grid").style.display="grid";
     const input = h<HTMLInputElement>("input", "main-input");
-    input.placeholder = "match N return N";
-    const queryButton = h("button", null, "Run Query");
-
+    input.value = "match (n) return n";
+    const queryButton = h<HTMLButtonElement>("button", null, "Run Query");
+    queryButton.disabled = true; // Disable queries until db has been set up
 
     $(".cypher-input").append(input, queryButton);
 
@@ -39,10 +39,23 @@ async function loadGame(api: Neo4jAPI){
       try {
         const query = input.value;
         const result=await api.runCypher(query);
-        input.value = "match (n) return n";
         console.log(result)
-        const showResults = new ShowResults()
-        $(".game-display").append(showResults.makeTableFrom(result));
+        input.value = "";
+
+        const display = $(".game-display");
+        while (display.firstChild) display.firstChild.remove();
+
+        if (result.length > 0) {
+          const showResults = new ShowResults()
+          display.append(
+            h("pre", null, showResults.makeTableFrom(result))
+          );
+        } else {
+          display.append(
+            h("p", null, "There seems to be nothing here")
+          );
+        }
+
         await eventsEngine.checkConditions()
         addQueryToSidebar(query);
       } catch (error) {
@@ -53,6 +66,9 @@ async function loadGame(api: Neo4jAPI){
     const gameSetup = new GameSetup(api)
     const eventsEngine = new EventsEngine(api)
     await gameSetup.lightSetup()
+
+    // Now we can run queries
+    queryButton.disabled = false;
 
     queryButton.addEventListener('click', runQuery);
 
@@ -88,4 +104,5 @@ async function loadGame(api: Neo4jAPI){
     }
 
     addMessageToSidebar("Hello, world!");
+    addQueryToSidebar("MATCH (l:LightSwitch) SET l.on = true");
 }

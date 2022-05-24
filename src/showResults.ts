@@ -1,23 +1,40 @@
 import AsciiTable from "ascii-table";
 
 
+const formatValue = (anything: any): string => {
+  if (anything === undefined) return "";
+  if (typeof anything === "object") return JSON.stringify(anything);
+  return String(anything);
+}
+
 export class ShowResults
 {
 
-    public makeTableFrom(result) {
-        console.log(result)
-        var table = new AsciiTable('A Title')
-        table
-          .setHeading('', 'Name', 'Age')
-          .addRow(1, 'Bob', 52)
-          .addRow(2, 'John', 34)
-          .addRow(3, 'Jim', 83)
-        
-        console.log(table.toString())
-        // assume node and labels for now
+    public makeTableFrom(result: any[][]) {
+        const entities = [];
 
+        for (const row of result) {
+            for (const node of row) {
+                entities.push({
+                    labels: node.labels.join(', '),
+                    ...node.properties,
+                });
+            }
+        }
+
+        const keys = entities.map(e => Object.keys(e));
+        const uniqueFields = new Set(...keys);
+        const columns = [...uniqueFields];
+
+        var table = new AsciiTable();
+        table.setHeading(...columns);
+
+        for (const e of entities) {
+            table.addRow(
+              ...columns.map(col => formatValue(e[col]))
+            );
+        }
 
         return table.toString()
-
     }
 }
