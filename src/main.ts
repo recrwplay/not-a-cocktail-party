@@ -13,8 +13,8 @@ $(".login-button").addEventListener("click", ()=>{
     // const password=$<HTMLInputElement>("#login-password").value
 
     const username="neo4j"
-    const password="qK6qOvIBbp6ZI1uXNtiK96l6zirs5VXGMcFJSrrSdrk"
-    const url="neo4j+s://bc90915d.databases.neo4j.io:7687"
+    const password="Uy1mtVLz8LeAMGfaSqZW0K66yqJO3ynjbpQoFo0iqpY"
+    const url="neo4j+s://b6472746.databases.neo4j.io:7687"
 
     const api = new Neo4jAPI(url, username, password)
     loadGame(api);

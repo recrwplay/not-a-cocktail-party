@@ -7,7 +7,26 @@ export class EventsEngine {
             conditions: [Queries.isLightOn],
             effects: [Queries.createSafe, Queries.createCupboard],
             effectText: "You turn the light on, the room is nasty"
-        }
+        },
+        {
+            conditions: [Queries.isBottomDrawerOpen],
+            effects: [Queries.createBox],
+            effectText: "You opened the bottom drawer and found a box, let's see what's in it."
+        },
+        {
+            conditions: [Queries.isTopDrawerOpen],
+            effects: [],
+            effectText: "Oh this drawer was empty, try opening another one."
+        },
+        {
+            conditions: [Queries.isMiddleDrawerOpen],
+            effects: [],
+            effectText: "Oh this drawer was empty, try opening another one."
+        },
+        { conditions: [Queries.isBoxOpen],
+            effects:[Queries.createPebbles, Queries.putPebblesInBox],
+            effectText: "You opened the box and it is full of pebbles hiding anything else."}
+
     ]
 
     private api: Neo4jAPI
@@ -23,11 +42,11 @@ export class EventsEngine {
             if(await this.runConditions(event.conditions)){
                 await this.runEffects(event.effects);
                 console.log(event.effectText);
-
             } else {
                 notRunEvents.push(event)
             }
         }
+        console.log(notRunEvents)
         this.events=notRunEvents;
     }
 
@@ -35,7 +54,10 @@ export class EventsEngine {
     public async runConditions(conditions:Array<string>): Promise<boolean>{
         const results=await Promise.all(conditions.map(async (query)=>{
             const result=await this.api.runCypher(query)
-            return result[0][0] as boolean
+            //console.log(result)
+            const res = result.length == 0 ? false : result[0][0] as boolean
+            console.log(res, query)
+            return res
         }))
         return results.every((c)=>{
             return c===true
