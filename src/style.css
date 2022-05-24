@@ -34,6 +34,10 @@ body {
 .sidebar {
   grid-area: sidebar;
   background-color: aliceblue;
+
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
 }
 .sidebar .query {
   font-family: monospace;
@@ -48,6 +52,12 @@ body {
   flex: 1;
 }
 .sidebar .message {
+  padding: 10px;
+}
+.sidebar .error {
+  font-family: monospace;
+  background-color: #fcc;
+  border-left: 3px solid #a00;
   padding: 10px;
 }
 

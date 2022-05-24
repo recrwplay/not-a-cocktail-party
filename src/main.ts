@@ -35,12 +35,16 @@ async function loadGame(api: Neo4jAPI){
     $(".bottom-controls").append(resetDatabaseButton, clueButton);
 
     const runQuery = async () => {
+      try {
         const query = input.value;
         const result=await api.runCypher(query);
         input.value = "";
         console.log(result)
         await eventsEgnine.checkConditions()
         addQueryToSidebar(query);
+      } catch (error) {
+        addErrorToSidebar(error as Error);
+      }
     };
 
     const gameSetup = new GameSetup(api)
@@ -75,6 +79,10 @@ async function loadGame(api: Neo4jAPI){
     const addMessageToSidebar = (message: string) => {
       sidebar.append(h("p", "message", message));
     };
+
+    const addErrorToSidebar = (error: Error) => {
+      sidebar.append(h("p", "error", String(error)));
+    }
 
     addMessageToSidebar("Hello, world!");
 }
