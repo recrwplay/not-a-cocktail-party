@@ -17,9 +17,10 @@ body {
 }
 
 .game-grid {
+  display: none;
   height: 100%;
   width: 100%;
-  display: grid;
+  /* display: grid; */
   grid-template-areas:
     "cypher-input    sidebar"
     "game-display    sidebar"
