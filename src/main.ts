@@ -1,6 +1,7 @@
 import "./style.css";
 import { h, $ } from "./dom";
 import {Neo4jAPI} from "./neo4j_api";
+import {GameSetup} from "./gameSetup";
 
 
 $(".login-button").addEventListener("click", ()=>{
@@ -18,7 +19,7 @@ $(".login-button").addEventListener("click", ()=>{
     loadGame(api);
 })
 
-function loadGame(api: Neo4jAPI){
+async function loadGame(api: Neo4jAPI){
     $(".game-grid").style.display="grid";
     const input = h<HTMLInputElement>("input", "main-input");
     input.placeholder = "match N return N";
@@ -37,14 +38,17 @@ function loadGame(api: Neo4jAPI){
         const result=await api.runCypher(query);
         input.value = "";
         console.log(result)
+        await gameSetup.generate()
     };
 
+    const gameSetup = new GameSetup(api)
+    await gameSetup.lightSetup()
 
     queryButton.addEventListener('click', runQuery);
+
     input.addEventListener('keydown', (e) => {
         if (e.key === "Enter") {
             runQuery();
         }
     });
-
 }
