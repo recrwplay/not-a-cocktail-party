@@ -21,7 +21,7 @@ export const isNode = (x: any): x is Node => {
   );
 };
 
-export const isRelation = (x: any): x is Node => {
+export const isRelation = (x: any): x is Relation => {
   if (!x) return false;
   return (
     typeof x.identity === "number" &&

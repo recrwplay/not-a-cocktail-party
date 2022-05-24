@@ -1,0 +1,8 @@
+circle.node:hover {
+  fill: darkcyan;
+}
+
+line.relation {
+  stroke: #f0f;
+  stroke-width: 2px;
+}
