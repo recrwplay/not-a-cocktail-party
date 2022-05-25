@@ -58,10 +58,10 @@ async function loadGame(api: Neo4jAPI){
               h("p", null, "There seems to be nothing here")
           );
         }
-          
-        // TODO: Display event messages
-        await eventsEngine.checkConditions()
+
+        const text=await eventsEngine.checkConditions();
         addQueryToSidebar(query);
+        if(text) addMessageToSidebar(text);
       } catch (error) {
         addErrorToSidebar(error as Error);
         console.error(error);
@@ -93,7 +93,7 @@ async function loadGame(api: Neo4jAPI){
       });
 
       sidebar.append(
-        h("div", "query", 
+        h("div", "query",
           h("p", null, query),
           rerunButton,
         ),

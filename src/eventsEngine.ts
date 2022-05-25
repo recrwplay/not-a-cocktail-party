@@ -35,18 +35,19 @@ export class EventsEngine {
         this.api = api
     }
 
-    public async checkConditions(){
+    public async checkConditions(): Promise<string | undefined> {
         const notRunEvents=[]
 
         for(const event of this.events){
             if(await this.runConditions(event.conditions)){
                 await this.runEffects(event.effects);
-                console.log(event.effectText);
+                return event.effectText;
             } else {
                 notRunEvents.push(event)
             }
         }
         this.events=notRunEvents;
+        return undefined
     }
 
 
@@ -65,5 +66,6 @@ export class EventsEngine {
         await Promise.all(effects.map(async (query)=>{
             await this.api.runCypher(query)
         }))
+
     }
 }
