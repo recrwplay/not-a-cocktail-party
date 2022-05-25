@@ -34,11 +34,6 @@ async function loadGame(api: Neo4jAPI){
 
     setLoading(true);
 
-    const resetDatabaseButton = h("button", null, "Reset Database");
-    const clueButton = h("button", null, "Give me a clue");
-
-    $(".bottom-controls").append(resetDatabaseButton, clueButton);
-
     const handleRunQueryEvent = () => {
       if (gameState.loading) return;
 
@@ -121,15 +116,25 @@ async function loadGame(api: Neo4jAPI){
     };
 
     const addMessageToSidebar = (message: string) => {
-      sidebar.prepend(h("p", "message", message));
+        const messageElement=h("p", "message")
+        messageElement.innerHTML=message
+      sidebar.prepend(messageElement);
     };
 
     const addErrorToSidebar = (error: Error) => {
       sidebar.prepend(h("p", "error", String(error)));
     }
 
-    addMessageToSidebar("Hello, world!");
-    addQueryToSidebar("MATCH (l:LightSwitch) SET l.on = true");
+    const initialMessage="You wake up in a dark room, head throbbing. That was definitely <b>not</b> a cocktail party."
+    addMessageToSidebar(initialMessage);
+
+
+    const resetDatabaseButton = $("#reset-button")
+    const clueButton = $("#clue-button")
+
+    clueButton.addEventListener("click", ()=>{
+        addMessageToSidebar(eventsEngine.clue)
+    })
 }
 
 const setLoading = (loading: boolean) => {

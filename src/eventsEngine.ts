@@ -3,30 +3,39 @@ import { Queries } from "./queries";
 import { GameText } from "./gameText";
 
 export class EventsEngine {
+    private lastEvent = {
+        clue: "Look the only thing there is, dummy"
+    }
+
     private events = [
         {
             conditions: [Queries.isLightOn],
             effects: [Queries.createSafe, Queries.createCupboard],
-            effectText: [GameText.lightIsOn]
+            effectText: [GameText.lightIsOn],
+            clue: "Look for things in the room",
         },
         {
             conditions: [Queries.isBottomDrawerOpen],
             effects: [Queries.createBox],
-            effectText: [GameText.bottomDrawerIsOpen]
+            effectText: [GameText.bottomDrawerIsOpen],
+            clue: "Look for things in the room",
         },
         {
             conditions: [Queries.isTopDrawerOpen],
             effects: [],
-            effectText: [GameText.topDrawerIsOpen]
+            effectText: [GameText.topDrawerIsOpen],
+            clue: "Look for things in the room",
         },
         {
             conditions: [Queries.isMiddleDrawerOpen],
             effects: [],
-            effectText: [GameText.middleDrawerIsOpen]
+            effectText: [GameText.middleDrawerIsOpen],
+            clue: "Look for things in the room",
         },
         { conditions: [Queries.isBoxOpen],
             effects:[Queries.createPebbles, Queries.putPebblesInBox],
-            effectText: [GameText.BoxIsOpen]
+            effectText: [GameText.BoxIsOpen],
+            clue: "That's rockin'",
         }
 
     ]
@@ -45,12 +54,17 @@ export class EventsEngine {
             if(await this.runConditions(event.conditions)){
                 await this.runEffects(event.effects);
                 messages.push(event.effectText);
+                this.lastEvent=event
             } else {
                 notRunEvents.push(event)
             }
         }
         this.events=notRunEvents;
         return messages
+    }
+
+    public get clue(): string{
+        return this.lastEvent.clue;
     }
 
 
