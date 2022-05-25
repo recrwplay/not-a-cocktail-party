@@ -34,8 +34,7 @@ const renderNode = (node: Node, position: Vec2): SVGElement => {
 
   group.append(circle, label /* , id */);
 
-  group.addEventListener("mouseover", (e) => {
-    e.stopPropagation();
+  group.addEventListener("mouseover", () => {
     spawnPopup(
       node.id,
       h("pre", null, JSON.stringify(node.properties, null, "  "))
@@ -57,6 +56,14 @@ const renderRelation = (
   line.setAttribute("y1", String(start?.y));
   line.setAttribute("x2", String(end?.x));
   line.setAttribute("y2", String(end?.y));
+
+  line.addEventListener("mouseover", () => {
+    spawnPopup(
+      relation.id,
+      h("pre", null, `:${relation.type} ${JSON.stringify(relation.properties, null, "  ")}`)
+    )
+  });
+
   return line;
 };
 
