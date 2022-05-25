@@ -19,5 +19,6 @@ export const ClueText =
 
     keyIsStillInBox: "You cannot open the safe while the key is still in the box.",
     keyIsInSafe: "The key fits :) You found your passport and 200SEK, now hurry up to the airport!",
-    openBox: "Try opening the box to see if you find anything interesting..."
+    openBox: "Try opening the box to see if you find anything interesting...",
+    keyOutBox: "Try putting the key in the safe."
 }

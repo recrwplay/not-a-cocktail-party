@@ -17,8 +17,8 @@ export const GameText =
     // boxes
     boxIsOpen: "You opened the box and it is full of pebbles hiding anything else.",
     keyInSafe: "Surprise, surprise, it fits! You found your passport and 200 SEK",
-    removeKeyFromBoxBeforePutInSafe: "Oops, you cannot use the key if it's still in the box"
-
+    removeKeyFromBoxBeforePutInSafe: "Oops, you cannot use the key if it's still in the box",
+    keyOutBox: "You took the key from the box."
 
 
 }
