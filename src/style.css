@@ -218,3 +218,12 @@ button.copy {
 button.copy::after {
   content: "\f07";
 }
+
+.plane-marquee {
+    position: absolute;
+    top: 400px;
+}
+
+.plane-marquee img {
+    width: 140px;
+}
