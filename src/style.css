@@ -171,27 +171,19 @@ border: 1px solid var(--color-blue-600);
 
 #login-map {
     padding-top: 20px;
+    font-size: small;
+}
+
+.title {
+    font-size: larger;
 }
 
 
 input[type=text], select {
   width: 20%;
-  /* padding: 12px 20px; */
-  /* margin: 8px 0; */
-  /* display: inline-block; */
-  /* border: 1px solid #ccc; */
-  /* border-radius: 4px; */
-  /* box-sizing: border-box; */
 }
 
 .login-button {
-  /* width: 10%; */
-  /* background-color: #4CAF50; */
-  /* color: white; */
-  /* padding: 14px 20px; */
-  /* margin: 8px 0; */
-  /* border: none; */
-  /* border-radius: 4px; */
   cursor: pointer;
 }
 
@@ -201,8 +193,6 @@ input[type=text], select {
 
 div {
   border-radius: 5px;
-  /* background-color: #f2f2f2; */
-  /* padding: 20px; */
 }
 .popup {
   position: absolute;
