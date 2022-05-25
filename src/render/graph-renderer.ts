@@ -98,8 +98,11 @@ export const renderGraph = (
   }
 
   for (const relation of relations.values()) {
-    const start = nodePositions.get(relation.start)!;
-    const end = nodePositions.get(relation.end)!;
+    const start = nodePositions.get(relation.start);
+    const end = nodePositions.get(relation.end);
+
+    // cannot render if we don't know positions
+    if (!start || !end) continue;
 
     result.push(renderRelation(relation, start, end));
   }
