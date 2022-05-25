@@ -18,7 +18,9 @@ export const ClueText =
     pebbley: "If there's anything else in here, you can't see it for all these pesky, pebbley pebbles.",
 
     keyIsStillInBox: "You cannot open the safe while the key is still in the box.",
-    keyIsInSafe: "The key fits :) You quickly retrieve your passport and 200SEK. You take a moment to compose yourself before heading to the airport.",
+    keyIsInSafe: `The key fits :) You quickly retrieve your passport and 200SEK. You take a moment to compose yourself before heading to the airport.
+    [For matching paths, use: MATCH p=(a)-[b]-(c)]. Also the functions reduce and relationships might be useful.`,
+
     openBox: "Maybe the box contains something interesting or useful...",
     keyOutBox: "You have a key, and you have a safe. Key. Safe."
 }
