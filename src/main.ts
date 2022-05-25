@@ -134,7 +134,7 @@ async function loadGame(api: Neo4jAPI){
 
         if (result.length === 0 && messages.length === 0) {
           display.append(
-            h("p", "message", "Nothing happened")
+            h("p", "message", "...crickets...")
           );
         }
       } catch (error) {
