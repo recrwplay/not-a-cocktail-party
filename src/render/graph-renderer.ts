@@ -81,7 +81,7 @@ export const renderGraph = (
     });
   }
 
-  const padding = -50;
+  const padding = 50;
   const randomPosition = () => ({
     x: padding + Math.floor(Math.random() * (width - padding * 2)),
     y: padding + Math.floor(Math.random() * (height - padding * 2)),
