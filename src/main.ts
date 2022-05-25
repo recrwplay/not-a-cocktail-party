@@ -75,12 +75,20 @@ async function loadGame(api: Neo4jAPI){
         if(!eventsEngine.level1Finished){
             result=await api.runCypher(query);
         } else {
-            const fullQuery=Level2Checker.getFullQuery(query)
-            result=await api.runReadOnlyCypher(fullQuery);
-            if(result.every((s)=>s[0]===true)){
-                addMessageToSidebar("You get to the airport");
+            let fullQuery = query;
+            if(query.includes("solution")){
+                fullQuery=Level2Checker.getFullQuery(query)
+                result=await api.runReadOnlyCypher(fullQuery);
+                console.log(result)
+                if(result.every((s)=>s[0]===true) && result.length > 0) {
+                    const price = result[0][1]
+                    const time = result[0][2]
+                    addMessageToSidebar("You get to the airport in " + time + " minutes and spending " + price + " Kronor. Well done!");
+                } else {
+                    addMessageToSidebar("You get lost and find yourself back at the hotel");
+                }
             } else {
-                addMessageToSidebar("You get lost and find yourself back at the hotel");
+                result=await api.runReadOnlyCypher(fullQuery);
             }
         }
 
