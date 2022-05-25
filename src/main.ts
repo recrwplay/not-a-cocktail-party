@@ -226,6 +226,7 @@ const parseNeo4jResponse = (result: any[][]) => {
 
   for (const group of result) {
       for (const item of group) {
+          if (!item) continue;
           if (typeof item === 'string') {
               rawStrings.push(item);
           } else {
