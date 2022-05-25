@@ -1,9 +1,10 @@
+import "./vars.css";
 import "./style.css";
+
 import { h, $ } from "./dom";
 import {Neo4jAPI} from "./neo4j_api";
 import {GameSetup} from "./gameSetup";
 import { EventsEngine } from "./eventsEngine";
-import {ShowResults} from "./showResults";
 import {config} from "./config"
 import { Node, Relationship } from "./graph";
 import {GameText} from "./gameText"
@@ -86,7 +87,7 @@ async function loadGame(api: Neo4jAPI){
 
         for (const message of messages) {
           display.prepend(
-            h("pre", null, message)
+            h("p", "message", message)
           )
 
           addMessageToSidebar(message);
@@ -94,7 +95,7 @@ async function loadGame(api: Neo4jAPI){
 
         if (result.length === 0 && messages.length === 0) {
           display.append(
-            h("pre", null, "Nothing happened")
+            h("p", "message", "Nothing happened")
           );
         }
       } catch (error) {

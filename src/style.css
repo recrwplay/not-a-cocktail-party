@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&display=swap');
+
 html,
 body {
   height: 100vh;
@@ -16,10 +18,18 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+button {
+  background-color: var(--color-blue-200);
+  border: 1px solid var(--color-blue-600);
+  border-radius: 4px;
+  color: var(--color-grey-700);
+}
+
 .game-grid {
   display: none;
   height: 100%;
   width: 100%;
+  padding: 0 15px;
   /* display: grid; */
   grid-template-areas:
     "cypher-input    sidebar"
@@ -31,15 +41,48 @@ body {
   grid-template-rows: auto 1fr auto;
 }
 
+.game-grid > div,
+.game-display > div {
+  padding: 0;
+  margin: 15px;
+  /* background-color: var(--colors-primary-10); */
+}
+
+.login {
+  padding: 15px;
+  margin: 15px;
+}
+
+.login h1 {
+  margin-bottom: 0.5rem;
+}
+
+.login input,
+.login button {
+  display: inline-block;
+  padding: 0.5rem;
+  margin: 0;
+  border-radius: 0;
+-webkit-appearance: none;
+border: 1px solid var(--color-blue-600);
+}
+
+.game-grid .message {
+  background-color: var(--colors-success-20);
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
 .sidebar {
   grid-area: sidebar;
-  background-color: aliceblue;
   overflow-y: auto;
 }
 .sidebar .query {
+  background-color: var(--colors-success-10);
   font-family: monospace;
   display: flex;
   padding: 10px;
+  margin-bottom: 15px;
   gap: 10px;
 }
 .sidebar .query:hover {
@@ -53,14 +96,25 @@ body {
 }
 .sidebar .error {
   font-family: monospace;
-  background-color: #fcc;
+  background-color: var(--color-red-200);
+  color: var(--color-red-900);
   border-left: 3px solid #a00;
-  padding: 10px;
+  margin-bottom:15px;
+  padding: 15px;
+}
+
+.header {
+  /* display: none; */
+  font-family: 'Cedarville Cursive', cursive;
+  font-size: 1.5rem;
+  /* background-color: var(--warning-color); */
+  margin:0 15px;
+  padding: 15px;
 }
 
 .cypher-input {
   grid-area: cypher-input;
-  background-color: beige;
+  /* background-color: var(--colors-primary-10); */
   padding: 15px;
   display: flex;
 }
@@ -73,22 +127,31 @@ body {
   flex: 0;
   font-size: 20px;
   white-space: nowrap;
+  margin-left: 15px;
 }
 
-.game-display {
+.game-grid .game-display {
+  background-color: var(--colors-primary-10);
   grid-area: game-display;
-  background-color: bisque;
+  margin: 15px;
 }
-.bottom-controls {
+.game-grid .bottom-controls {
   grid-area: bottom-controls;
   padding: 15px;
-  background-color: darkslategrey;
+  background-color: var(--colors-primary-10);
+  margin: 15px;
 }
 .bottom-controls button {
   font-size: 20px;
 }
 .bottom-controls button + button {
   margin-left: 20px;
+}
+
+.game-grid .knowledge {
+  display:none;
+  background-color: var(--colors-primary-10);
+  padding: 15px;
 }
 
 

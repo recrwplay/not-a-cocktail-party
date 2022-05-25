@@ -4,24 +4,26 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Not A Cocktail Party</title>
+    <title>Not a cocktail party</title>
   </head>
   <body>
-      <div class="login">
-        <h1>Not A Cocktail Party</h1>
-        <input type="text" id="login-url" placeholder="url"/>
-        <input type="text" id="login-username" placeholder="username"/>
-        <input type="text" id="login-password" placeholder="password"/>
-        <button class="login-button">Login</button>
-        <div id="login-map"></div>
-      </div>
-
+    <div class="header">
+      <p class="title">It was <b>not</b> a cocktail party!</p>
+    </div>
+    <div class="login">
+      <h1>Connect to Neo4j</h1>
+      <input type="text" id="login-url" placeholder="url"/>
+      <input type="text" id="login-username" placeholder="username"/>
+      <input type="password" id="login-password" placeholder="password"/>
+      <button class="login-button">Login</button>
+      <div id="login-map"></div>
+    </div>
     <div class="game-grid">
       <div class="sidebar"></div>
       <div class="cypher-input"></div>
       <div class="game-display"></div>
       <div class="knowledge">
-        <span class="title">Things learned</span>
+        <span class="title">This much I have learned:</span>
         <div class="learned"></div>
       </div>
       <div class="bottom-controls">
