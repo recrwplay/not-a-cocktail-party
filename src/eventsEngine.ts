@@ -40,7 +40,7 @@ const gameEvents: Event[] = [
     },
     {
         conditions: [Queries.isBoxOpen],
-        effects: [Queries.createPebbles, Queries.putPebblesInBox],
+        effects: [Queries.createPebbles, Queries.putPebblesInBox, Queries.putKeyInBox],
         effectText: GameText.boxIsOpen,
         clueText: ClueText.pebbley,
         repeatEffects: false
