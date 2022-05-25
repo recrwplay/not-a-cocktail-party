@@ -63,16 +63,24 @@ async function loadGame(api: Neo4jAPI){
           if (nodes.length)         display.append(h("pre", null, showResults.makeTableFrom(nodes)));
           if (relationships.length) display.append(h("pre", null, showResults.makeTableFrom(relationships)));
           if (rawStrings.length)    display.append(h("pre", null, JSON.stringify(rawStrings, null, '  ')));
-        } else {
-          display.append(
-              h("p", null, "There seems to be nothing here")
-          );
         }
 
         const messages=await eventsEngine.checkConditions();
         addQueryToSidebar(query);
 
-        for (const message of messages) addMessageToSidebar(message);
+        for (const message of messages) {
+          display.prepend(
+            h("pre", null, message)
+          )
+
+          addMessageToSidebar(message);
+        }
+
+        if (result.length === 0 && messages.length === 0) {
+          display.append(
+            h("pre", null, "Nothing happened")
+          );
+        }
       } catch (error) {
         addErrorToSidebar(error as Error);
         console.error(error);
