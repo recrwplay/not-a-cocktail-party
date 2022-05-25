@@ -116,7 +116,7 @@ border: 1px solid var(--color-blue-600);
 
 .game-title {
   font-family: 'Cedarville Cursive', cursive;
-  font-size: 1.5rem;
+  font-size: 29px;
 }
 
 .cypher-input {
@@ -142,6 +142,10 @@ border: 1px solid var(--color-blue-600);
   background-color: var(--colors-primary-10);
   grid-area: game-display;
   margin: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 .game-grid .bottom-controls {
   grid-area: bottom-controls;
