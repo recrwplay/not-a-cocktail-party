@@ -90,6 +90,7 @@ export class EventsEngine {
         const newEvents = await Promise.all(this.events.map(async (event) => {
             if (await this.runConditions(event.conditions)) {
                 await this.runEffects(event.effects);
+                messages.push(event.effectText);
                 if(event.money != null)
                 {
                     this.collectedMoney+=event.money
@@ -98,7 +99,6 @@ export class EventsEngine {
                 {
                     return event
                 }
-                messages.push(event.effectText);
                 this.lastEvent = event
                 return null
             } else {

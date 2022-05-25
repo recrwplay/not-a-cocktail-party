@@ -16,7 +16,11 @@ export const GameText =
 
     // boxes
     boxIsOpen: "You open the box. It seems to be full of pebbles. If there's anything else in there, you can't see it.",
-    keyInSafe: "Surprise, surprise, the key fits! You retrieve your passport and 200 SEK from the safe.",
+    keyInSafe: `Surprise, surprise, the key fits! You retrieve your passport and 200 SEK from the safe.
+    Now that you have everything you need, you watch your clock and realize your plane is taking off soon. 
+    You need to be at the airport in less than 25 minutes and you have only the money that you found in the room to get there. 
+    You quickly draw a map of all the options and try to figure how to get there.
+[ Once you figured out how you want to do this, return the path solution as the variable "solution" to go home.] `,
     removeKeyFromBoxBeforePutInSafe: "Oops, you cannot use the key if it's still in the box",
     keyOutBox: "You take the key out of the box. Now, what to do with it..."
 
