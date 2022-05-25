@@ -10,6 +10,7 @@ import { Node, Relationship } from "./graph";
 import {GameText} from "./gameText"
 import { Level2Checker } from "./level2Checker";
 import {map} from "./map";
+import {ShowResults} from "./showResults"
 
 
 const loginMap=$("#login-map")

@@ -4,6 +4,8 @@ export const GameText =
     // initial game state
     initialState: "You wake up. It is dark. So dark. You don't know where you are or how you got here, but you are sure you were <b>not</b> at a cocktail party last night.",
 
+    resetDatabase: "You feel tired after all this stumbling around in the metaphorical dark. You lie on the floor and MATCH (s:self) SET s.asleep = TRUE",
+
     // switch the light on
     lightIsOn: "You turn the light on, the room is nasty",
 
