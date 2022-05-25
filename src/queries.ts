@@ -7,9 +7,9 @@ export const Queries =
     isMiddleDrawerOpen: `MATCH (d: MiddleDrawer) RETURN d.open AS result`,
     isBoxOpen: `MATCH (b: Box) RETURN b.open AS result`,
     isKeyInSafe:
-        `MATCH (key:Key) 
+        `MATCH (key:Key)
         MATCH (safe:Safe)
-        MATCH (box:Box) 
+        MATCH (box:Box)
         WHERE (key)-[:IN]->(safe) AND NOT (key)-[:IN]->(box) RETURN count(*) =1`,
     isKeyStillInBox:
         `
@@ -36,13 +36,11 @@ export const Queries =
     createBox:
         `MATCH (d:BottomDrawer)
         CREATE (:Box {open:false, description: "A random box"})-[:IN]->(d)`,
-    createPebbles:
-        `UNWIND range(1,1000) as iterator
-        CREATE(:Pebble {description:"Another man's treasure"})`,
     putPebblesInBox:
-        `MATCH (p:Pebble)
+        `
         MATCH (b:Box)
-        CREATE (p)-[:IN]->(b)
+        UNWIND range(1,1000) as iterator
+        CREATE (p:Pebble {description:"Another man's treasure"})-[:IN]->(b)
         RETURN *`,
     putKeyInBox:
     `
