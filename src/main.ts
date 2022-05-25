@@ -57,10 +57,10 @@ async function loadGame(api: Neo4jAPI){
         // textarea.setAttribute('readonly', '')
         // textarea.style.position = 'absolute'
         // textarea.style.left = '-9999px'
-    
+
         // document.body.appendChild(textarea)
         // textarea.select()
-    
+
         // document.execCommand('copy')
         // document.body.removeChild(textarea)
 
@@ -259,40 +259,40 @@ const parseNeo4jResponse = (result: any[][]) => {
   }
 }
 
-const renderNode = (node: Node) => {
-  const title = `${node.labels}  (id ${node.id})`;
-  const properties = Object.entries(node.properties).map(([key, value]) => `  ${key}:  ${value}`);
-  return renderThing(title, properties);
-};
+// const renderNode = (node: Node) => {
+//   const title = `${node.labels}  (id ${node.id})`;
+//   const properties = Object.entries(node.properties).map(([key, value]) => `  ${key}:  ${value}`);
+//   return renderThing(title, properties);
+// };
+//
+// const renderRelationship = (rel: Relationship) => {
+//   // TODO: Figute out how to display a relationship in a meaningful way
+//   const title =  `Relationship ${rel.type}  (id ${rel.id})`;
+//   const properties = Object.entries(rel.properties).map(([key, value]) => `  ${key}:  ${value}`);
+//   return renderThing(title, properties);
+// }
 
-const renderRelationship = (rel: Relationship) => {
-  // TODO: Figute out how to display a relationship in a meaningful way
-  const title =  `Relationship ${rel.type}  (id ${rel.id})`;
-  const properties = Object.entries(rel.properties).map(([key, value]) => `  ${key}:  ${value}`);
-  return renderThing(title, properties);
-}
 
-
-const renderThing = (title: string, body: string[]) => {
-  const button = h("button", "toggle", "-");
-  // TODO: Figute out how to display a relationship in a meaningful way
-  const properties = h("pre", null, body.join('\n'));
-
-  let open = true;
-
-  const toggle = () => {
-    open = !open;
-    button.textContent = open ? '-' : '+';
-    properties.style.display = open ? 'block' : 'none';
-  }
-
-  button.addEventListener('click', toggle);
-
-  return h("div", "node",
-    h("div", "node-header",
-      h("pre", null, title),
-      button
-    ),
-    properties
-  );
-}
+// const renderThing = (title: string, body: string[]) => {
+//   const button = h("button", "toggle", "-");
+//   // TODO: Figute out how to display a relationship in a meaningful way
+//   const properties = h("pre", null, body.join('\n'));
+//
+//   let open = true;
+//
+//   const toggle = () => {
+//     open = !open;
+//     button.textContent = open ? '-' : '+';
+//     properties.style.display = open ? 'block' : 'none';
+//   }
+//
+//   button.addEventListener('click', toggle);
+//
+//   return h("div", "node",
+//     h("div", "node-header",
+//       h("pre", null, title),
+//       button
+//     ),
+//     properties
+//   );
+// }
