@@ -52,7 +52,8 @@ export class EventsEngine {
 
     public async runConditions(conditions:Array<string>): Promise<boolean>{
         const results=await Promise.all(conditions.map(async (query)=>{
-            const result=await this.api.runCypher(query)
+            const result=await this.api.runCypher(query);
+            if(result.length===0) return false;
             return result[0][0] as boolean
         }))
         return results.every((c)=>{
