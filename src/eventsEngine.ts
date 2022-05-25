@@ -2,48 +2,57 @@ import { Neo4jAPI } from "./neo4j_api";
 import { Queries } from "./queries";
 import { GameText } from "./gameText";
 
+interface Event {
+    conditions: string[];
+    effects: string[];
+    effectText: string;
+    clue: string;
+}
+
+const gameEvents: Event[] = [
+    {
+        conditions: [Queries.isLightOn],
+        effects: [Queries.createSafe, Queries.createCupboard],
+        effectText: GameText.lightIsOn,
+        clue: "Look for things in the room",
+    },
+    {
+        conditions: [Queries.isBottomDrawerOpen],
+        effects: [Queries.createBox],
+        effectText: GameText.bottomDrawerIsOpen,
+        clue: "Look for things in the room",
+    },
+    {
+        conditions: [Queries.isTopDrawerOpen],
+        effects: [],
+        effectText: GameText.topDrawerIsOpen,
+        clue: "Look for things in the room",
+    },
+    {
+        conditions: [Queries.isMiddleDrawerOpen],
+        effects: [],
+        effectText: GameText.middleDrawerIsOpen,
+        clue: "Look for things in the room",
+    },
+    { conditions: [Queries.isBoxOpen],
+        effects:[Queries.createPebbles, Queries.putPebblesInBox],
+        effectText: GameText.boxIsOpen,
+        clue: "That's rockin'",
+    }
+]
+
+
 export class EventsEngine {
+    private api: Neo4jAPI
+    private events: Event[];
+
     private lastEvent = {
         clue: "Look the only thing there is, dummy"
     }
 
-    private events = [
-        {
-            conditions: [Queries.isLightOn],
-            effects: [Queries.createSafe, Queries.createCupboard],
-            effectText: [GameText.lightIsOn],
-            clue: "Look for things in the room",
-        },
-        {
-            conditions: [Queries.isBottomDrawerOpen],
-            effects: [Queries.createBox],
-            effectText: [GameText.bottomDrawerIsOpen],
-            clue: "Look for things in the room",
-        },
-        {
-            conditions: [Queries.isTopDrawerOpen],
-            effects: [],
-            effectText: [GameText.topDrawerIsOpen],
-            clue: "Look for things in the room",
-        },
-        {
-            conditions: [Queries.isMiddleDrawerOpen],
-            effects: [],
-            effectText: [GameText.middleDrawerIsOpen],
-            clue: "Look for things in the room",
-        },
-        { conditions: [Queries.isBoxOpen],
-            effects:[Queries.createPebbles, Queries.putPebblesInBox],
-            effectText: [GameText.BoxIsOpen],
-            clue: "That's rockin'",
-        }
-
-    ]
-
-    private api: Neo4jAPI
-
     constructor(api: Neo4jAPI) {
         this.api = api
+        this.events = [...gameEvents];
     }
 
     public async checkConditions(): Promise<string[]> {
@@ -84,5 +93,9 @@ export class EventsEngine {
             await this.api.runCypher(query)
         }))
 
+    }
+
+    public reset() {
+        this.events = [...gameEvents];
     }
 }

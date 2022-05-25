@@ -133,6 +133,17 @@ async function loadGame(api: Neo4jAPI){
     clueButton.addEventListener("click", ()=>{
         addMessageToSidebar(eventsEngine.clue)
     })
+
+    resetDatabaseButton.addEventListener('click', async () => {
+      const yes = confirm("This will reset the entire database state. Are you sure?");
+      if (yes) {
+        setLoading(true);
+        await gameSetup.lightSetup();
+        eventsEngine.reset();
+        addMessageToSidebar("The game state has been reset.");
+        setLoading(false);
+      }
+    });
 }
 
 const setLoading = (loading: boolean) => {
