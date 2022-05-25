@@ -23,7 +23,7 @@ export const Queries =
 
     //Create objects
     createLightSwitch : `CREATE (lightSwitch:LightSwitch {on: false, description: "Looks like a common light switch. Also works like one."})`,
-    createSafe: `CREATE (:Safe {locked: true, description:"A wooden chest with metal structures."})`,
+    createSafe: `CREATE (:Safe {description:"A wooden chest with metal structures."})`,
     createCupboard:
         `CREATE (cupboard:Cupboard {description:"A wooden cupboard. It matches with the bed."})
         CREATE (:TopDrawer {open:false, description: "Top drawer"})-[:IN]->(cupboard)
