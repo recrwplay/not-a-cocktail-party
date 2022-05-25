@@ -8,6 +8,7 @@ interface Event {
     effects: string[];
     effectText: string;
     clueText: string;
+    isLastEvent?: boolean
 }
 
 const gameEvents: Event[] = [
@@ -46,21 +47,21 @@ const gameEvents: Event[] = [
 
 export class EventsEngine {
     private api: Neo4jAPI
-    private events: Event[];
+    private events: Event[] = [];
 
-    private lastEvent = {
+    private lastEvent: {clueText: string, isLastEvent?: boolean} = {
         clueText: ClueText.initial
     }
 
     constructor(api: Neo4jAPI) {
         this.api = api
-        this.events = [...gameEvents];
+        this.reset();
     }
 
     public async checkConditions(): Promise<string[]> {
         const messages: string[] = [];
 
-        const newEvents=await Promise.all(this.events.map(async (event) => {
+        const newEvents = await Promise.all(this.events.map(async (event) => {
             if (await this.runConditions(event.conditions)) {
                 await this.runEffects(event.effects);
                 messages.push(event.effectText);
@@ -80,6 +81,10 @@ export class EventsEngine {
         return this.lastEvent.clueText;
     }
 
+    public get level1Finished(): boolean {
+        return Boolean(this.lastEvent.isLastEvent)
+
+    }
 
     public async runConditions(conditions: Array<string>): Promise<boolean> {
         const results = await Promise.all(conditions.map(async (query) => {
@@ -101,5 +106,9 @@ export class EventsEngine {
 
     public reset() {
         this.events = [...gameEvents];
+        this.lastEvent={
+            clueText: ClueText.initial
+        }
+
     }
 }

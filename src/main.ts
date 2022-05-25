@@ -7,6 +7,7 @@ import {ShowResults} from "./showResults";
 import {config} from "./config"
 import { Node, Relationship } from "./graph";
 import {GameText} from "./gameText"
+import { Level2Checker } from "./level2Checker";
 
 
 $(".login-button").addEventListener("click", ()=>{
@@ -45,7 +46,13 @@ async function loadGame(api: Neo4jAPI){
     const runQuery = async (query: string) => {
       try {
         setLoading(true);
-        const result=await api.runCypher(query);
+        let result: Object[][]
+        if(!eventsEngine.level1Finished){
+            result=await api.runCypher(query);
+        } else {
+            const fullQuery=Level2Checker.getFullQuery(query)
+            result=await api.runCypher(fullQuery);
+        }
 
         const display = $(".game-display");
         while (display.firstChild) display.firstChild.remove();
@@ -55,7 +62,7 @@ async function loadGame(api: Neo4jAPI){
 
           for (const node of nodes) display.append(renderNode(node));
           for (const rel of relationships) display.append(renderRelationship(rel));
-          
+
           // This is the ascii table stuff
           const showResults = new ShowResults()
           if (nodes.length)         display.append(h("pre", null, showResults.makeTableFrom(nodes)));
@@ -63,7 +70,14 @@ async function loadGame(api: Neo4jAPI){
           if (rawStrings.length)    display.append(h("pre", null, JSON.stringify(rawStrings, null, '  ')));
         }
 
-        const messages=await eventsEngine.checkConditions();
+
+        let messages:string[]=[]
+
+        if(!eventsEngine.level1Finished){
+            // LEVEL 1
+            messages=await eventsEngine.checkConditions();
+        }
+
         addQueryToSidebar(query);
 
         for (const message of messages) {
@@ -87,9 +101,9 @@ async function loadGame(api: Neo4jAPI){
       }
     };
 
-    const eventsEngine = new EventsEngine(api)
     const gameSetup = new GameSetup(api)
-    await gameSetup.lightSetup()
+    const eventsEngine = new EventsEngine(api)
+    await gameSetup.setupLevel1()
 
     // Now we can run queries
     setLoading(false);
@@ -142,7 +156,7 @@ async function loadGame(api: Neo4jAPI){
       const yes = confirm("This will reset the entire database state. Are you sure?");
       if (yes) {
         setLoading(true);
-        await gameSetup.lightSetup();
+        await gameSetup.setupLevel1();
         eventsEngine.reset();
         addMessageToSidebar(GameText.resetDatabase);
         addMessageToSidebar("The game state has been reset.");
@@ -222,7 +236,7 @@ const renderThing = (title: string, body: string[]) => {
     button.textContent = open ? '-' : '+';
     properties.style.display = open ? 'block' : 'none';
   }
-  
+
   button.addEventListener('click', toggle);
 
   return h("div", "node",

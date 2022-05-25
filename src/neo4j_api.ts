@@ -8,8 +8,6 @@ export class Neo4jAPI {
         this.driver = neo4j.driver(url, auth)
     }
 
-
-
     public async runCypher(query: string) {
         const session = this.driver.session()
         const result = await session.run(query)
@@ -19,5 +17,15 @@ export class Neo4jAPI {
         return result.records.map((record) => {
             return Array.from(record.values())
         })
+    }
+
+    public async runReadOnlyCypher(query:string){
+        if(!this.isReadOnly(query)) throw new Error("You are not powerful enough to do this");
+        this.runCypher(query)
+    }
+
+    private isReadOnly(query: string){
+        const invalidRegex=/CREATE|MERGE|SET|DELETE|REMOVE|apoc/ig;
+        return query.match(invalidRegex)===null;
     }
 }
