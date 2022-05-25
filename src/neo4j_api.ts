@@ -21,7 +21,7 @@ export class Neo4jAPI {
 
     public async runReadOnlyCypher(query:string){
         if(!this.isReadOnly(query)) throw new Error("You are not powerful enough to do this");
-        this.runCypher(query)
+        return this.runCypher(query)
     }
 
     private isReadOnly(query: string){

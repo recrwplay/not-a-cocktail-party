@@ -76,7 +76,7 @@ async function loadGame(api: Neo4jAPI){
             result=await api.runCypher(query);
         } else {
             const fullQuery=Level2Checker.getFullQuery(query)
-            result=await api.runCypher(fullQuery);
+            result=await api.runReadOnlyCypher(fullQuery);
             if(result.every((s)=>s[0]===true)){
                 addMessageToSidebar("You get to the airport");
             } else {
