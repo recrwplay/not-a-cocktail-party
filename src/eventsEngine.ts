@@ -35,19 +35,20 @@ export class EventsEngine {
         this.api = api
     }
 
-    public async checkConditions(): Promise<string | undefined> {
+    public async checkConditions(): Promise<string[]> {
         const notRunEvents=[]
+        const messages = [];
 
         for(const event of this.events){
             if(await this.runConditions(event.conditions)){
                 await this.runEffects(event.effects);
-                return event.effectText;
+                messages.push(event.effectText);
             } else {
                 notRunEvents.push(event)
             }
         }
         this.events=notRunEvents;
-        return undefined
+        return messages
     }
 
 

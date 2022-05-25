@@ -59,9 +59,10 @@ async function loadGame(api: Neo4jAPI){
           );
         }
 
-        const text=await eventsEngine.checkConditions();
+        const messages=await eventsEngine.checkConditions();
         addQueryToSidebar(query);
-        if(text) addMessageToSidebar(text);
+
+        for (const message of messages) addMessageToSidebar(message);
       } catch (error) {
         addErrorToSidebar(error as Error);
         console.error(error);
