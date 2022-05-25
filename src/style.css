@@ -35,13 +35,14 @@ button {
   padding: 0 0.5rem;
   /* display: grid; */
   grid-template-areas:
+    "header          header"
     "cypher-input    sidebar"
     "game-display    sidebar"
     "bottom-controls sidebar";
 
 
   grid-template-columns: 1fr 300px;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: auto auto 1fr auto;
 }
 
 .game-grid > div,
@@ -108,11 +109,15 @@ border: 1px solid var(--color-blue-600);
 
 .header {
   /* display: none; */
-  font-family: 'Cedarville Cursive', cursive;
-  font-size: 1.5rem;
   /* background-color: var(--warning-color); */
   margin:0 0.5rem;
   padding: 0.5rem;
+  grid-area: header;
+}
+
+.game-title {
+  font-family: 'Cedarville Cursive', cursive;
+  font-size: 1.5rem;
 }
 
 .cypher-input {
