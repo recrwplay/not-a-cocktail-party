@@ -6,6 +6,19 @@ export const Queries =
     isTopDrawerOpen: `MATCH (d: TopDrawer) RETURN d.open AS result`,
     isMiddleDrawerOpen: `MATCH (d: MiddleDrawer) RETURN d.open AS result`,
     isBoxOpen: `MATCH (b: Box) RETURN b.open AS result`,
+    isKeyInSafe:
+        `MATCH (key:Key) 
+        MATCH (safe:Safe)
+        MATCH (box:Box) 
+        WHERE (key)-[:IN]->(safe) AND NOT (key)-[:IN]->(box) RETURN count(*) =1`,
+        isKeyStillInBox:
+            `
+            MATCH (key:Key)-[:IN]->(:Box)
+            MATCH (key)-[:IN]->(:Safe)
+            RETURN COUNT (*) = 1 
+           `,
+
+
     //Misc
     resetSetup: `MATCH (n) DETACH DELETE n`,
 
@@ -27,14 +40,13 @@ export const Queries =
         `MATCH (p:Pebble)
         MATCH (b:Box)
         CREATE (p)-[:IN]->(b)
-        RETURN *`
+        RETURN *`,
+    putKeyInBox:
+        `MATCH (b:Box)
+        CREATE (:Key {description:"This man's treasure. Opens the safe"})-[:IN]->(b)`,
 
-        /*RETURN *
-        MATCH (b:Box)
-        MERGE (:KEY {description:"This man's treasure. Opens the safe"})-[:IN]->(b)`,
-         */
-    ,
 
     //Update objects
-    updateLightSwitchDesc: `MATCH (l:LightSwitch) SET l.description = 'A light switch to turn the room light on or off. This much you have figured out...'`
+    updateLightSwitchDesc: `MATCH (l:LightSwitch) SET l.description = 'A light switch to turn the room light on or off. This much you have figured out...'`,
+    removeKeyFromSafe: `MATCH (k:Key)-[r:IN]->(:Safe) DELETE r`
 }
