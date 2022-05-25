@@ -88,17 +88,17 @@ async function loadGame(api: Neo4jAPI){
         while (display.firstChild) display.firstChild.remove();
 
         if (result.length > 0) {
-          const { nodes, relationships } = parseNeo4jResponse(result);
+          const { nodes, relationships, rawStrings } = parseNeo4jResponse(result);
           display.append(svg("svg", "graph", ...renderGraph(nodes, relationships, 700, 500)));
 
           // for (const node of nodes) display.append(renderNode(node));
           // for (const rel of relationships) display.append(renderRelationship(rel));
 
           // This is the ascii table stuff
-          // const showResults = new ShowResults()
-          // if (nodes.length)         display.append(h("pre", null, showResults.makeTableFrom(nodes)));
+          const showResults = new ShowResults()
+          if (nodes.length)         display.append(h("pre", null, showResults.makeTableFrom(nodes)));
           // if (relationships.length) display.append(h("pre", null, showResults.makeTableFrom(relationships)));
-          // if (rawStrings.length)    display.append(h("pre", null, JSON.stringify(rawStrings, null, '  ')));
+          if (rawStrings.length)    display.append(h("pre", null, JSON.stringify(rawStrings, null, '  ')));
         }
 
 
