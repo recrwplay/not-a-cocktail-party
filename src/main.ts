@@ -188,9 +188,13 @@ async function loadGame(api: Neo4jAPI){
 
     addMessageToSidebar(GameText.initialState);
 
-
+    const renderFullGraphButton = $("#render-full-graph-button")
     const resetDatabaseButton = $("#reset-button")
     const clueButton = $("#clue-button")
+
+    renderFullGraphButton.addEventListener("click", () => {
+      runQuery(`MATCH(n) OPTIONAL MATCH(n)-[r]->() RETURN *`);
+    });
 
     clueButton.addEventListener("click", ()=>{
         addMessageToSidebar(eventsEngine.clueText)
