@@ -1,5 +1,19 @@
-circle.node:hover {
-  fill: darkcyan;
+.graph {
+  overflow: visible;
+  width: 700px;
+  height: 500px;
+  display: block;
+  margin: 0 auto;
+}
+
+text.id {
+  font-size: 12px;
+}
+
+circle {
+  stroke: darkcyan;
+  stroke-width: 2px;
+  fill: bisque;
 }
 
 line.relation {

@@ -1,7 +1,6 @@
 import "./vars.css";
 import "./style.css";
-
-import { h, $ } from "./dom";
+import { h, $, svg } from "./dom";
 import {Neo4jAPI} from "./neo4j_api";
 import {GameSetup} from "./gameSetup";
 import { EventsEngine } from "./eventsEngine";
@@ -11,7 +10,7 @@ import {GameText} from "./gameText"
 import { Level2Checker } from "./level2Checker";
 import {map} from "./map";
 import {ShowResults} from "./showResults"
-
+import { renderGraph } from "./render/graph-renderer";
 
 const loginMap=$("#login-map")
 loginMap.innerHTML=map;
@@ -41,15 +40,17 @@ async function loadGame(api: Neo4jAPI){
 
     setLoading(true);
 
-    const handleRunQueryEvent = () => {
+    const handleRunQueryEvent = async () => {
       if (gameState.loading) return;
 
       const query = input.value;
-      input.value = "";
-      runQuery(query);
+      const success = await runQuery(query);
+      
+      if (success) input.value = "";
     };
 
     const runQuery = async (query: string) => {
+      let success = true;
       try {
         setLoading(true);
         let result: Object[][]
@@ -65,6 +66,9 @@ async function loadGame(api: Neo4jAPI){
 
         if (result.length > 0) {
           const { nodes, relationships, rawStrings } = parseNeo4jResponse(result);
+          display.append(svg("svg", "graph", ...renderGraph(nodes, relationships, 700, 500)));
+
+          console.log({nodes, relationships});
 
           for (const node of nodes) display.append(renderNode(node));
           for (const rel of relationships) display.append(renderRelationship(rel));
@@ -102,9 +106,11 @@ async function loadGame(api: Neo4jAPI){
       } catch (error) {
         addErrorToSidebar(error as Error);
         console.error(error);
+        success = false;
       } finally {
         setLoading(false);
       }
+      return success;
     };
 
     const gameSetup = new GameSetup(api)
@@ -176,12 +182,14 @@ const setLoading = (loading: boolean) => {
     button.disabled = loading;
   }
 
+  $<HTMLTextAreaElement>('.cypher-input textarea').disabled = loading;
+
   gameState.loading = loading;
 }
 
 const parseNeo4jResponse = (result: any[][]) => {
-  const nodes: Node[] = [];
-  const relationships: Relationship[] = [];
+  const nodes = new Map<number, Node>();
+  const relationships = new Map<number, Relationship>();
   const rawStrings: string[] = [];
 
   for (const group of result) {
@@ -191,18 +199,20 @@ const parseNeo4jResponse = (result: any[][]) => {
           } else {
             // Assume it's either a node or relationship
             if (item.__isRelationship__) {
-              relationships.push({
+              const id = item.identity.low;
+              relationships.set(id, {
                   type: item.type,
                   properties: item.properties,
-                  id: item.identity.low,
+                  id,
                   start: item.start.low,
                   end: item.end.low,
               })
             } else if (item.__isNode__) {
-              nodes.push({
+              const id = item.identity.low;
+              nodes.set(id, {
                   labels: item.labels.join(', '),
                   properties: item.properties,
-                  id: item.identity.low,
+                  id,
               });
             }
           }
@@ -210,8 +220,8 @@ const parseNeo4jResponse = (result: any[][]) => {
   }
 
   return {
-    nodes,
-    relationships,
+    nodes: [...nodes.values()],
+    relationships: [...relationships.values()],
     rawStrings,
   }
 }
