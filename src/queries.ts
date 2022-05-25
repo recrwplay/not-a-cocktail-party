@@ -16,7 +16,11 @@ export const Queries =
         MATCH (key:Key)-[:IN]->(:Box)
         MATCH (key)-[:IN]->(:Safe)
         RETURN COUNT (*) = 1`,
-
+    keyOutBox:
+        `MATCH (key:Key)
+         MATCH (b:Box)
+         WHERE NOT (key)-[:IN]->(b)
+         RETURN count(key)>0`,
 
     //Misc
     resetSetup: `MATCH (n) DETACH DELETE n`,
@@ -48,8 +52,4 @@ export const Queries =
     //Update objects
     updateLightSwitchDesc: `MATCH (l:LightSwitch) SET l.description = 'A light switch to turn the room light on or off. This much you have figured out...'`,
     removeKeyFromSafe: `MATCH (k:Key)-[r:IN]->(:Safe) DELETE r`,
-
-    // Level 2 setup
-    createLevel2: `CREATE (n:Airport)`
-
 }

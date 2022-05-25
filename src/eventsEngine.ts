@@ -18,7 +18,7 @@ const gameEvents: Event[] = [
         conditions: [Queries.isLightOn],
         effects: [Queries.createSafe, Queries.createCupboard],
         effectText: GameText.lightIsOn,
-        clueText: ClueText.openThings
+        clueText: ClueText.openThings,
     },
     {
         conditions: [Queries.isBottomDrawerOpen],
@@ -58,7 +58,14 @@ const gameEvents: Event[] = [
         effectText: GameText.keyInSafe,
         clueText: ClueText.keyIsInSafe,
         money: 200,
-        repeatEffects: false
+        repeatEffects: false,
+        isLastEvent: true
+    },
+    {
+        conditions: [Queries.keyOutBox],
+        effects: [],
+        effectText: GameText.keyOutBox,
+        clueText: ClueText.keyOutBox
     }
 ]
 

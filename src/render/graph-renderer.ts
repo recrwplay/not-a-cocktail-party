@@ -1,56 +1,65 @@
-import { svg } from "../dom";
-import { Node, Relation, isNode, isRelation } from "../graph";
+import { h, svg } from "../dom";
+import { Node, Relationship } from "../graph";
+import { spawnPopup } from "../popup";
 
-import './graph.css';
-
-interface Graph {
-  nodes: Map<number, Node>;
-  relations: Map<number, Relation>;
-}
+import "./graph.css";
 
 interface Vec2 {
   x: number;
   y: number;
 }
 
-export const parseGraph = (graphData: any[]): Graph => {
-  const result: Graph = {
-    nodes: new Map(),
-    relations: new Map(),
-  };
-
-  for (const entry of graphData) {
-    if (isNode(entry)) result.nodes.set(entry.identity, entry);
-    if (isRelation(entry)) result.relations.set(entry.identity, entry);
-  }
-
-  return result;
-};
-
-const renderNode = (node: Node, position: Vec2): SVGCircleElement => {
+const renderNode = (node: Node, position: Vec2): SVGElement => {
   const circle = svg("circle", "node") as SVGCircleElement;
-  circle.dataset.id = String(node.identity);
+  circle.dataset.id = String(node.id);
   circle.dataset.props = JSON.stringify(node.properties);
 
-  circle.setAttribute("cx", String(position.x));
-  circle.setAttribute("cy", String(position.y));
-  circle.setAttribute("r", "30");
-  return circle;
-}
+  // circle.setAttribute("cx", String(position.x));
+  // circle.setAttribute("cy", String(position.y));
+  circle.setAttribute("r", "50");
 
-const renderRelation = (relation: Relation, start: Vec2, end: Vec2): SVGLineElement => {
+  const label = svg("text", "label");
+  label.textContent = node.labels;
+  label.setAttribute("text-anchor", "middle");
+
+  const id = svg("text", "id");
+  id.textContent = `id: ${node.id}`;
+  id.setAttribute("text-anchor", "middle");
+  id.setAttribute("transform", "translate(0 20)");
+
+  const group = svg("g");
+  group.setAttribute("transform", `translate(${position.x} ${position.y})`);
+
+  group.append(circle, label, id);
+
+  group.addEventListener('click', (e) => {
+    e.stopPropagation();
+    spawnPopup(
+      h("pre", null, JSON.stringify(node.properties, null, '  '))
+    )
+  });
+
+  return group;
+};
+
+const renderRelation = (
+  relation: Relationship,
+  start: Vec2,
+  end: Vec2
+): SVGLineElement => {
   const line = svg("line", "relation") as SVGLineElement;
-  line.dataset.id = String(relation.identity);
+  line.dataset.id = String(relation.id);
   line.dataset.props = JSON.stringify(relation.properties);
   line.setAttribute("x1", String(start?.x));
   line.setAttribute("y1", String(start?.y));
   line.setAttribute("x2", String(end?.x));
   line.setAttribute("y2", String(end?.y));
   return line;
-}
+};
 
 export const renderGraph = (
-  graph: Graph,
+  nodes: Node[],
+  relations: Relationship[],
   width: number,
   height: number
 ): SVGElement[] => {
@@ -58,61 +67,39 @@ export const renderGraph = (
 
   const nodePositions = new Map<number, Vec2>();
 
-  for (const node of graph.nodes.values()) {
-    const position = {
-      x: Math.floor(Math.random() * width),
-      y: Math.floor(Math.random() * height),
-    };
+  const middle = { x: width / 2, y: height / 2 };
+  const goodPositions: Vec2[] = [middle];
 
-    nodePositions.set(node.identity, position);
+  const circlePositions = 9;
+  for (let i = 0; i < circlePositions; i++) {
+    const radius = 200;
+    const angle = (i/circlePositions) * 2 * Math.PI;
+    goodPositions.push({
+      x: middle.x + Math.cos(angle) * radius,
+      y: middle.y + Math.sin(angle) * radius,
+    });
+  }
+
+  const randomPosition = () => ({
+    x: Math.floor(Math.random() * width),
+    y: Math.floor(Math.random() * height),
+  });
+
+  for (const node of nodes.values()) {
+    const [goodPos] = goodPositions.splice(0, 1);
+    const position = goodPos || randomPosition();
+
+    nodePositions.set(node.id, position);
     result.push(renderNode(node, position));
   }
 
-  for (const relation of graph.relations.values()) {
+  for (const relation of relations.values()) {
     const start = nodePositions.get(relation.start)!;
     const end = nodePositions.get(relation.end)!;
+    console.log({start, end})
 
     result.push(renderRelation(relation, start, end));
   }
 
-  return result;
-};
-
-// import sampleData from '../../sample_data/records.json';
-const sampleData = [
-  {
-    "m": {
-      "identity": 154,
-      "labels": ["Movie"],
-      "properties": {
-        "title": "Something's Gotta Give",
-        "released": 2003
-      }
-    },
-    "n": {
-      "identity": 1,
-      "labels": ["Person"],
-      "properties": {
-        "born": 1964,
-        "name": "Keanu Reeves"
-      }
-    },
-    "r": {
-      "identity": 221,
-      "start": 1,
-      "end": 154,
-      "type": "ACTED_IN",
-      "properties": {
-        "roles": ["Julian Mercer"]
-      }
-    }
-  }
-];
-
-export const renderSampleData = () => {
-  const graph = parseGraph(
-    sampleData.flatMap(x => [...Object.values(x)])
-  );
-
-  return renderGraph(graph, 500, 500);
+  return result.reverse();
 };
