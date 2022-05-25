@@ -1,14 +1,16 @@
-import {Neo4jAPI} from "./neo4j_api";
-import {Queries} from "./queries";
-import {GameText} from "./gameText";
+import { Neo4jAPI } from "./neo4j_api";
+import { Queries } from "./queries";
+import { GameText } from "./gameText";
+import { ClueText } from "./clueText";
 
 interface Event {
     conditions: string[];
     effects: string[];
     effectText: string;
-    clue: string;
-    money: number;
-    repeatEffects: boolean;
+    clueText: string;
+    money?: number;
+    repeatEffects?: boolean;
+    isLastEvent?: boolean
 }
 
 const gameEvents: Event[] = [
@@ -16,55 +18,45 @@ const gameEvents: Event[] = [
         conditions: [Queries.isLightOn],
         effects: [Queries.createSafe, Queries.createCupboard],
         effectText: GameText.lightIsOn,
-        clue: "Look for things in the room",
-        money: 0,
-        repeatEffects: false
+        clueText: ClueText.openThings
     },
     {
         conditions: [Queries.isBottomDrawerOpen],
         effects: [Queries.createBox],
         effectText: GameText.bottomDrawerIsOpen,
-        clue: "Look for things in the room",
-        money: 0,
-        repeatEffects: false
+        clueText: ClueText.openBox,
     },
     {
         conditions: [Queries.isTopDrawerOpen],
         effects: [],
         effectText: GameText.topDrawerIsOpen,
-        clue: "Look for things in the room",
-        money: 0,
-        repeatEffects: false
+        clueText: ClueText.otherDrawer,
     },
     {
         conditions: [Queries.isMiddleDrawerOpen],
         effects: [],
         effectText: GameText.middleDrawerIsOpen,
-        clue: "Look for things in the room",
-        money: 100,
-        repeatEffects: false
+        clueText: ClueText.otherDrawer,
     },
     {
         conditions: [Queries.isBoxOpen],
-        effects: [Queries.putKeyInBox, Queries.createPebbles, Queries.putPebblesInBox ],
+        effects: [Queries.createPebbles, Queries.putPebblesInBox],
         effectText: GameText.boxIsOpen,
-        clue: "That's rockin'",
-        money: 0,
+        clueText: ClueText.pebbley,
         repeatEffects: false
     },
     {
         conditions: [Queries.isKeyStillInBox],
         effects: [Queries.removeKeyFromSafe],
         effectText: GameText.removeKeyFromBoxBeforePutInSafe,
-        clue: "You have to remove the key from the box in order to put it in the safe",
-        money: 0,
+        clueText: ClueText.keyIsStillInBox,
         repeatEffects: true
     },
     {
         conditions: [Queries.isKeyInSafe],
         effects: [],
         effectText: GameText.keyInSafe,
-        clue: "",
+        clueText: ClueText.keyIsInSafe,
         money: 200,
         repeatEffects: false
     }
@@ -73,44 +65,51 @@ const gameEvents: Event[] = [
 
 export class EventsEngine {
     private api: Neo4jAPI
-    private events: Event[];
-    public collectedMoney = 0
+    private events: Event[] = [];
+    public collectedMoney: number = 0
 
-    private lastEvent = {
-        clue: "Look the only thing there is, dummy"
+    private lastEvent: {clueText: string, isLastEvent?: boolean} = {
+        clueText: ClueText.initial
     }
 
     constructor(api: Neo4jAPI) {
         this.api = api
-        this.events = [...gameEvents];
+        this.reset();
     }
 
     public async checkConditions(): Promise<string[]> {
-        const notRunEvents = []
-        const messages = [];
+        const messages: string[] = [];
 
-        for (const event of this.events) {
+        const newEvents = await Promise.all(this.events.map(async (event) => {
             if (await this.runConditions(event.conditions)) {
                 await this.runEffects(event.effects);
-                this.collectedMoney+=event.money
+                if(event.money != null)
+                {
+                    this.collectedMoney+=event.money
+                }
+                if(event.repeatEffects != null && event.repeatEffects)
+                {
+                    return event
+                }
                 messages.push(event.effectText);
                 this.lastEvent = event
-                if(event.repeatEffects)
-                {
-                    notRunEvents.push(event)
-                }
+                return null
             } else {
-                notRunEvents.push(event)
+                return event
             }
-        }
-        this.events = notRunEvents;
+        }))
+        this.events = newEvents.filter(Boolean) as Event[];
         return messages
     }
 
-    public get clue(): string {
-        return this.lastEvent.clue;
+    public get clueText(): string {
+        return this.lastEvent.clueText;
     }
 
+    public get level1Finished(): boolean {
+        return Boolean(this.lastEvent.isLastEvent)
+
+    }
 
     public async runConditions(conditions: Array<string>): Promise<boolean> {
         const results = await Promise.all(conditions.map(async (query) => {
@@ -132,5 +131,9 @@ export class EventsEngine {
 
     public reset() {
         this.events = [...gameEvents];
+        this.lastEvent={
+            clueText: ClueText.initial
+        }
+
     }
 }

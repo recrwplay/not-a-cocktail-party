@@ -9,9 +9,14 @@ export class GameSetup
         this.api = api
     }
 
-    public async lightSetup() {
+    public async setupLevel1() {
         await this.api.runCypher(Queries.resetSetup)
         await this.api.runCypher(Queries.createLightSwitch)
     }
 
+
+    public async setupLevel2(){
+        await this.api.runCypher(Queries.resetSetup)
+        await this.api.runCypher(Queries.createLevel2)
+    }
 }

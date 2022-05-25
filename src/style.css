@@ -90,3 +90,15 @@ body {
 .bottom-controls button + button {
   margin-left: 20px;
 }
+
+
+.node .toggle {
+  padding: 0;
+  margin-left: 10px;
+  border: 0;
+  width: 20px;
+  background-color: burlywood;
+}
+.node-header {
+  display: flex;
+}

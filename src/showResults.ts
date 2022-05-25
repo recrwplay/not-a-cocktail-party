@@ -11,16 +11,19 @@ export class ShowResults
     public makeTableFrom(rows: Record<string, any>[]) {
         if (rows.length === 0) return '';
 
-        const keys = rows.map(row => Object.keys(row));
-        const uniqueFields = new Set(...keys);
+        const uniqueFields = new Set(rows.map(row => Object.keys(row)).flat());
+        const propertyKeys = new Set(rows.map(row => Object.keys(row.properties || {})).flat());
+        uniqueFields.delete("properties");
         const columns = [...uniqueFields];
+        const propertyColumns = [...propertyKeys]
 
         var table = new AsciiTable();
-        table.setHeading(...columns);
+        table.setHeading(...columns, ...propertyColumns);
 
         for (const row of rows) {
             table.addRow(
-              ...columns.map(col => formatValue(row[col]))
+              ...columns.map(col => formatValue(row[col])),
+              ...propertyColumns.map(col => formatValue(row.properties[col]))
             );
         }
 
