@@ -3,6 +3,7 @@ import { Node, Relationship } from "../graph";
 import { spawnPopup } from "../popup";
 
 import "./graph.css";
+import "../vars.css";
 
 interface Vec2 {
   x: number;

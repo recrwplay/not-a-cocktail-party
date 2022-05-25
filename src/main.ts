@@ -80,7 +80,7 @@ async function loadGame(api: Neo4jAPI){
             if(result.every((s)=>s[0]===true)){
                 addMessageToSidebar("You get to the airport");
             } else {
-                addMessageToSidebar("You get lost and end up again on the hotel");
+                addMessageToSidebar("You get lost and find yourself back at the hotel");
             }
         }
 

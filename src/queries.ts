@@ -29,13 +29,13 @@ export const Queries =
     createLightSwitch : `CREATE (lightSwitch:LightSwitch {on: false, description: "Looks like a common light switch. Also works like one."})`,
     createSafe: `CREATE (:Safe {description:"A wooden chest with metal structures."})`,
     createCupboard:
-        `CREATE (cupboard:Cupboard {description:"A wooden cupboard. It matches with the bed."})
+        `CREATE (cupboard:Cupboard {description:"A wooden cupboard. It matches the bed."})
         CREATE (:TopDrawer {open:false, description: "Top drawer"})-[:IN]->(cupboard)
         CREATE (:MiddleDrawer {open:false, description: "Middle drawer"})-[:IN]->(cupboard)
         CREATE (:BottomDrawer {open:false, description: "Bottom drawer"})-[:IN]->(cupboard)`,
     createBox:
         `MATCH (d:BottomDrawer)
-        CREATE (:Box {open:false, description: "A random box"})-[:IN]->(d)`,
+        CREATE (:Box {open:false, description: "Just a box. Nothing special about it at first glance."})-[:IN]->(d)`,
     putPebblesInBox:
         `
         MATCH (b:Box)
@@ -44,10 +44,10 @@ export const Queries =
         RETURN *`,
     putKeyInBox:
     `
-    MATCH (b:Box) CREATE (:Key {description:"Opens the safe"})-[:IN]->(b)
+    MATCH (b:Box) CREATE (:Key {description:"A key that looks like it would open a safe"})-[:IN]->(b)
     `,
 
     //Update objects
-    updateLightSwitchDesc: `MATCH (l:LightSwitch) SET l.description = 'A light switch to turn the room light on or off. This much you have figured out...'`,
+    updateLightSwitchDesc: `MATCH (l:LightSwitch) SET l.description = 'A functioning light switch that turns the room light on or off. This much you have figured out...'`,
     removeKeyFromSafe: `MATCH (k:Key)-[r:IN]->(:Safe) DELETE r`,
 }

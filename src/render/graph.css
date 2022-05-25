@@ -11,12 +11,20 @@ text.id {
 }
 
 circle {
-  stroke: darkcyan;
+  stroke: var(--color-blue-600);
   stroke-width: 2px;
-  fill: bisque;
+  fill: var(--color-blue-200);
 }
 
 line.relation {
   stroke: #f0f;
   stroke-width: 2px;
+}
+
+.game-display .label {
+  fill: var(--color-blue-800)
+}
+
+.game-display .id {
+  fill: var(--color-red-800)
 }

@@ -9,7 +9,7 @@ export const ClueText =
     look: "Look around you. Just look around you. Not that there's much to see in this darkness...",
 
     // open things
-    openThings: "You vaguely remember that a special feature of furniture is that you can put things inside it. But how to see what's in there...?",
+    openThings: "You vaguely remember that rooms often contain furniture, including items that you can put things inside. But how to see what's in here...?",
 
     // look elsewhere
     otherDrawer: "Maybe there's something in one of the other drawers?",
@@ -18,7 +18,7 @@ export const ClueText =
     pebbley: "If there's anything else in here, you can't see it for all these pesky, pebbley pebbles.",
 
     keyIsStillInBox: "You cannot open the safe while the key is still in the box.",
-    keyIsInSafe: "The key fits :) You found your passport and 200SEK, now hurry up to the airport!",
-    openBox: "Try opening the box to see if you find anything interesting...",
-    keyOutBox: "Try putting the key in the safe."
+    keyIsInSafe: "The key fits :) You quickly retrieve your passport and 200SEK. You take a moment to compose yourself before heading to the airport.",
+    openBox: "Maybe the box contains something interesting or useful...",
+    keyOutBox: "You have a key, and you have a safe. Key. Safe."
 }
