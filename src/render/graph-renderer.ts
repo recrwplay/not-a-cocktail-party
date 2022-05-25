@@ -22,16 +22,17 @@ const renderNode = (node: Node, position: Vec2): SVGElement => {
   const label = svg("text", "label");
   label.textContent = node.labels;
   label.setAttribute("text-anchor", "middle");
+  label.setAttribute("dy", "5");
 
-  const id = svg("text", "id");
-  id.textContent = `id: ${node.id}`;
-  id.setAttribute("text-anchor", "middle");
-  id.setAttribute("transform", "translate(0 20)");
+  // const id = svg("text", "id");
+  // id.textContent = `id: ${node.id}`;
+  // id.setAttribute("text-anchor", "middle");
+  // id.setAttribute("transform", "translate(0 20)");
 
   const group = svg("g");
   group.setAttribute("transform", `translate(${position.x} ${position.y})`);
 
-  group.append(circle, label, id);
+  group.append(circle, label /* , id */);
 
   group.addEventListener("mouseover", (e) => {
     e.stopPropagation();
