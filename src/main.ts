@@ -27,7 +27,7 @@ const gameState = {
 
 async function loadGame(api: Neo4jAPI){
     $(".game-grid").style.display="grid";
-    const input = h<HTMLInputElement>("input", "main-input");
+    const input = h<HTMLInputElement>("textarea", "main-input");
     input.value = "match (n) return n";
     const queryButton = h<HTMLButtonElement>("button", null, "Run Query");
     $(".cypher-input").append(input, queryButton);
@@ -99,7 +99,7 @@ async function loadGame(api: Neo4jAPI){
     queryButton.addEventListener('click', handleRunQueryEvent);
 
     input.addEventListener('keydown', (e) => {
-        if (e.key === "Enter") {
+        if (e.key === "Enter" && !e.shiftKey) {
             handleRunQueryEvent();
         }
     });
