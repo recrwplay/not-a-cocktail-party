@@ -40,6 +40,10 @@ export const Queries =
         MATCH (b:Box)
         CREATE (p)-[:IN]->(b)
         RETURN *`,
+    putKeyInBox:
+    `
+    MATCH (b:Box) CREATE (:Key {description:"Opens the safe"})-[:IN]->(b)
+    `,
 
     //Update objects
     updateLightSwitchDesc: `MATCH (l:LightSwitch) SET l.description = 'A light switch to turn the room light on or off. This much you have figured out...'`,
