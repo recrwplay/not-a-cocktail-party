@@ -49,6 +49,24 @@ async function loadGame(api: Neo4jAPI){
       runQuery(query);
     };
 
+    const copyToInput = async (query: string) => {
+        input.value = query;
+
+        // var textarea = document.createElement('textarea')
+        // textarea.value = query
+        // textarea.setAttribute('readonly', '')
+        // textarea.style.position = 'absolute'
+        // textarea.style.left = '-9999px'
+    
+        // document.body.appendChild(textarea)
+        // textarea.select()
+    
+        // document.execCommand('copy')
+        // document.body.removeChild(textarea)
+
+    }
+
+
     const runQuery = async (query: string) => {
       try {
         setLoading(true);
@@ -125,14 +143,22 @@ async function loadGame(api: Neo4jAPI){
     const sidebar = $(".sidebar");
 
     const addQueryToSidebar = (query: string) => {
-      const rerunButton = h("button", "rerun", "Rerun");
+      const rerunButton = h("i", "fa", "");
+      rerunButton.classList.add("fa-play");
       rerunButton.addEventListener("click", () => {
         runQuery(query);
+      });
+
+      const copyButton = h("i", "fa", "");
+      copyButton.classList.add("fa-copy");
+      copyButton.addEventListener("click", () => {
+        copyToInput(query);
       });
 
       sidebar.prepend(
         h("div", "query",
           h("p", null, query),
+          copyButton,
           rerunButton,
         ),
       );

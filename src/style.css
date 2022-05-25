@@ -29,7 +29,7 @@ button {
   display: none;
   height: 100%;
   width: 100%;
-  padding: 0 15px;
+  padding: 0 0.5rem;
   /* display: grid; */
   grid-template-areas:
     "cypher-input    sidebar"
@@ -44,13 +44,13 @@ button {
 .game-grid > div,
 .game-display > div {
   padding: 0;
-  margin: 15px;
+  margin: 0.5rem;
   /* background-color: var(--colors-primary-10); */
 }
 
 .login {
-  padding: 15px;
-  margin: 15px;
+  padding: 0.5rem;
+  margin: 0.5rem;
 }
 
 .login h1 {
@@ -69,8 +69,8 @@ border: 1px solid var(--color-blue-600);
 
 .game-grid .message {
   background-color: var(--colors-success-20);
-  padding: 15px;
-  margin-bottom: 15px;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .sidebar {
@@ -82,7 +82,7 @@ border: 1px solid var(--color-blue-600);
   font-family: monospace;
   display: flex;
   padding: 10px;
-  margin-bottom: 15px;
+  margin-bottom: 0.5rem;
   gap: 10px;
 }
 .sidebar .query:hover {
@@ -99,8 +99,8 @@ border: 1px solid var(--color-blue-600);
   background-color: var(--color-red-200);
   color: var(--color-red-900);
   border-left: 3px solid #a00;
-  margin-bottom:15px;
-  padding: 15px;
+  margin-bottom:0.5rem;
+  padding: 0.5rem;
 }
 
 .header {
@@ -108,50 +108,51 @@ border: 1px solid var(--color-blue-600);
   font-family: 'Cedarville Cursive', cursive;
   font-size: 1.5rem;
   /* background-color: var(--warning-color); */
-  margin:0 15px;
-  padding: 15px;
+  margin:0 0.5rem;
+  padding: 0.5rem;
 }
 
 .cypher-input {
   grid-area: cypher-input;
   /* background-color: var(--colors-primary-10); */
-  padding: 15px;
+  padding: 0.5rem;
   display: flex;
 }
 .cypher-input textarea {
   flex: 1;
   font-size: 30px;
   font-family: monospace;
+  padding: 0.5rem;
 }
 .cypher-input button {
   flex: 0;
   font-size: 20px;
   white-space: nowrap;
-  margin-left: 15px;
+  margin-left: 0.5rem;
 }
 
 .game-grid .game-display {
   background-color: var(--colors-primary-10);
   grid-area: game-display;
-  margin: 15px;
+  margin: 0.5rem;
 }
 .game-grid .bottom-controls {
   grid-area: bottom-controls;
-  padding: 15px;
-  background-color: var(--colors-primary-10);
-  margin: 15px;
+  /* background-color: var(--colors-primary-10); */
+  padding: 0;
+  margin: 0.5rem;
 }
 .bottom-controls button {
-  font-size: 20px;
+  font-size: 1rem;
 }
 .bottom-controls button + button {
-  margin-left: 20px;
+  margin-left: 0.5rem;
 }
 
 .game-grid .knowledge {
   display:none;
   background-color: var(--colors-primary-10);
-  padding: 15px;
+  padding: 0.5rem;
 }
 
 
@@ -160,7 +161,7 @@ border: 1px solid var(--color-blue-600);
   margin-left: 10px;
   border: 0;
   width: 20px;
-  background-color: burlywood;
+  background-color: var(--colors-primary-30);
 }
 .node-header {
   display: flex;
@@ -200,4 +201,13 @@ div {
   border-radius: 5px;
   /* background-color: #f2f2f2; */
   /* padding: 20px; */
+}
+
+button.copy {
+  background: none;
+  border: none;
+}
+
+button.copy::after {
+  content: "\f07";
 }
