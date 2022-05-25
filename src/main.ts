@@ -249,7 +249,7 @@ const parseNeo4jResponse = (result: any[][]) => {
               const id = item.identity.low;
               relationships.set(id, {
                   type: item.type,
-                  properties: item.properties,
+                  properties: prettifyProperties(item.properties),
                   id,
                   start: item.start.low,
                   end: item.end.low,
@@ -258,7 +258,7 @@ const parseNeo4jResponse = (result: any[][]) => {
               const id = item.identity.low;
               nodes.set(id, {
                   labels: item.labels.join(', '),
-                  properties: item.properties,
+                  properties: prettifyProperties(item.properties),
                   id,
               });
             }
@@ -272,6 +272,18 @@ const parseNeo4jResponse = (result: any[][]) => {
     rawStrings,
   }
 }
+
+const prettifyProperties = (props: Record<string, any>): Record<string, any> => {
+  return Object.fromEntries(
+    Object.entries(props)
+      .map(([key, value]) => {
+        if (typeof value === "object" && typeof value.high === "number" && typeof value.low === "number") {
+          return [key, value.low];
+        }
+        return [key, value];
+      })
+  );
+};
 
 // const renderNode = (node: Node) => {
 //   const title = `${node.labels}  (id ${node.id})`;
