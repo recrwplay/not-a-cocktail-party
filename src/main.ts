@@ -21,6 +21,10 @@ $(".login-button").addEventListener("click", ()=>{
     loadGame(api);
 })
 
+const gameState = {
+  loading: false,
+};
+
 async function loadGame(api: Neo4jAPI){
     $(".game-grid").style.display="grid";
     const input = h<HTMLInputElement>("input", "main-input");
@@ -35,13 +39,18 @@ async function loadGame(api: Neo4jAPI){
 
     $(".bottom-controls").append(resetDatabaseButton, clueButton);
 
-    const runQuery = async () => {
+    const handleRunQueryEvent = () => {
+      if (gameState.loading) return;
+
+      const query = input.value;
+      input.value = "";
+      runQuery(query);
+    };
+
+    const runQuery = async (query: string) => {
       try {
         setLoading(true);
-        const query = input.value;
         const result=await api.runCypher(query);
-        console.log(result)
-        input.value = "";
 
         const display = $(".game-display");
         while (display.firstChild) display.firstChild.remove();
@@ -79,11 +88,11 @@ async function loadGame(api: Neo4jAPI){
     // Now we can run queries
     setLoading(false);
 
-    queryButton.addEventListener('click', runQuery);
+    queryButton.addEventListener('click', handleRunQueryEvent);
 
     input.addEventListener('keydown', (e) => {
         if (e.key === "Enter") {
-            runQuery();
+            handleRunQueryEvent();
         }
     });
 
@@ -92,11 +101,10 @@ async function loadGame(api: Neo4jAPI){
     const addQueryToSidebar = (query: string) => {
       const rerunButton = h("button", "rerun", "Rerun");
       rerunButton.addEventListener("click", () => {
-        input.value = query;
-        runQuery();
+        runQuery(query);
       });
 
-      sidebar.append(
+      sidebar.prepend(
         h("div", "query",
           h("p", null, query),
           rerunButton,
@@ -105,11 +113,11 @@ async function loadGame(api: Neo4jAPI){
     };
 
     const addMessageToSidebar = (message: string) => {
-      sidebar.append(h("p", "message", message));
+      sidebar.prepend(h("p", "message", message));
     };
 
     const addErrorToSidebar = (error: Error) => {
-      sidebar.append(h("p", "error", String(error)));
+      sidebar.prepend(h("p", "error", String(error)));
     }
 
     addMessageToSidebar("Hello, world!");
@@ -120,6 +128,8 @@ const setLoading = (loading: boolean) => {
   for (const button of document.querySelectorAll<HTMLButtonElement>('button')) {
     button.disabled = loading;
   }
+
+  gameState.loading = loading;
 }
 
 const parseNeo4jResponse = (result: any[][]) => {

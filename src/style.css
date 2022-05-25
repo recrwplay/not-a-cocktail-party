@@ -34,10 +34,7 @@ body {
 .sidebar {
   grid-area: sidebar;
   background-color: aliceblue;
-
-  display: flex;
-  flex-direction: column-reverse;
-  justify-content: flex-end;
+  overflow-y: auto;
 }
 .sidebar .query {
   font-family: monospace;
