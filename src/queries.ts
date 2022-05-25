@@ -48,8 +48,4 @@ export const Queries =
     //Update objects
     updateLightSwitchDesc: `MATCH (l:LightSwitch) SET l.description = 'A light switch to turn the room light on or off. This much you have figured out...'`,
     removeKeyFromSafe: `MATCH (k:Key)-[r:IN]->(:Safe) DELETE r`,
-
-    // Level 2 setup
-    createLevel2: `CREATE (n:Airport)`
-
 }
