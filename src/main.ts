@@ -26,9 +26,9 @@ async function loadGame(api: Neo4jAPI){
     const input = h<HTMLInputElement>("input", "main-input");
     input.value = "match (n) return n";
     const queryButton = h<HTMLButtonElement>("button", null, "Run Query");
-    queryButton.disabled = true; // Disable queries until db has been set up
-
     $(".cypher-input").append(input, queryButton);
+
+    setLoading(true);
 
     const resetDatabaseButton = h("button", null, "Reset Database");
     const clueButton = h("button", null, "Give me a clue");
@@ -37,6 +37,7 @@ async function loadGame(api: Neo4jAPI){
 
     const runQuery = async () => {
       try {
+        setLoading(true);
         const query = input.value;
         const result=await api.runCypher(query);
         console.log(result)
@@ -66,6 +67,8 @@ async function loadGame(api: Neo4jAPI){
       } catch (error) {
         addErrorToSidebar(error as Error);
         console.error(error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -74,7 +77,7 @@ async function loadGame(api: Neo4jAPI){
     await gameSetup.lightSetup()
 
     // Now we can run queries
-    queryButton.disabled = false;
+    setLoading(false);
 
     queryButton.addEventListener('click', runQuery);
 
@@ -113,6 +116,11 @@ async function loadGame(api: Neo4jAPI){
     addQueryToSidebar("MATCH (l:LightSwitch) SET l.on = true");
 }
 
+const setLoading = (loading: boolean) => {
+  for (const button of document.querySelectorAll<HTMLButtonElement>('button')) {
+    button.disabled = loading;
+  }
+}
 
 const parseNeo4jResponse = (result: any[][]) => {
   const nodes = [];
