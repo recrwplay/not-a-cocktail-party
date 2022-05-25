@@ -4,18 +4,16 @@ import {Neo4jAPI} from "./neo4j_api";
 import {GameSetup} from "./gameSetup";
 import { EventsEngine } from "./eventsEngine";
 import {ShowResults} from "./showResults";
+import {config} from "./config"
 
 
 $(".login-button").addEventListener("click", ()=>{
     $(".login").style.display="none";
 
-    // const url=$<HTMLInputElement>("#login-url").value
-    // const username=$<HTMLInputElement>("#login-username").value
-    // const password=$<HTMLInputElement>("#login-password").value
+    const url=$<HTMLInputElement>("#login-url").value || config.url
+    const username=$<HTMLInputElement>("#login-username").value || config.username
+    const password=$<HTMLInputElement>("#login-password").value || config.password
 
-    const username="neo4j"
-    const password="Uy1mtVLz8LeAMGfaSqZW0K66yqJO3ynjbpQoFo0iqpY"
-    const url="neo4j+s://b6472746.databases.neo4j.io:7687"
 
     const api = new Neo4jAPI(url, username, password)
     loadGame(api);
