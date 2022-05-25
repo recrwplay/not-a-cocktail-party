@@ -32,11 +32,12 @@ const renderNode = (node: Node, position: Vec2): SVGElement => {
 
   group.append(circle, label, id);
 
-  group.addEventListener('click', (e) => {
+  group.addEventListener("mouseover", (e) => {
     e.stopPropagation();
     spawnPopup(
-      h("pre", null, JSON.stringify(node.properties, null, '  '))
-    )
+      node.id,
+      h("pre", null, JSON.stringify(node.properties, null, "  "))
+    );
   });
 
   return group;
@@ -73,16 +74,17 @@ export const renderGraph = (
   const circlePositions = 9;
   for (let i = 0; i < circlePositions; i++) {
     const radius = 200;
-    const angle = (i/circlePositions) * 2 * Math.PI;
+    const angle = (i / circlePositions) * 2 * Math.PI;
     goodPositions.push({
       x: middle.x + Math.cos(angle) * radius,
       y: middle.y + Math.sin(angle) * radius,
     });
   }
 
+  const padding = -50;
   const randomPosition = () => ({
-    x: Math.floor(Math.random() * width),
-    y: Math.floor(Math.random() * height),
+    x: padding + Math.floor(Math.random() * (width - padding * 2)),
+    y: padding + Math.floor(Math.random() * (height - padding * 2)),
   });
 
   for (const node of nodes.values()) {
@@ -96,7 +98,6 @@ export const renderGraph = (
   for (const relation of relations.values()) {
     const start = nodePositions.get(relation.start)!;
     const end = nodePositions.get(relation.end)!;
-    console.log({start, end})
 
     result.push(renderRelation(relation, start, end));
   }
