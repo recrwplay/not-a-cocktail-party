@@ -4,7 +4,7 @@ import { h, $, svg } from "./dom";
 import {Neo4jAPI} from "./neo4j_api";
 import {GameSetup} from "./gameSetup";
 import { EventsEngine } from "./eventsEngine";
-import {config} from "./config"
+import {config} from "../config"
 import { Node, Relationship } from "./graph";
 import {GameText} from "./gameText"
 import { Level2Checker } from "./level2Checker";
@@ -45,7 +45,7 @@ async function loadGame(api: Neo4jAPI){
 
       const query = input.value;
       const success = await runQuery(query);
-      
+
       if (success) input.value = "";
     };
 
@@ -59,6 +59,7 @@ async function loadGame(api: Neo4jAPI){
         } else {
             const fullQuery=Level2Checker.getFullQuery(query)
             result=await api.runCypher(fullQuery);
+            console.log(result);
         }
 
         const display = $(".game-display");

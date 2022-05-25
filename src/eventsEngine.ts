@@ -107,6 +107,7 @@ export class EventsEngine {
     }
 
     public get level1Finished(): boolean {
+        return true
         return Boolean(this.lastEvent.isLastEvent)
 
     }
