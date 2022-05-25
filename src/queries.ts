@@ -38,7 +38,7 @@ export const Queries =
         CREATE (:Box {open:false, description: "Just a box. Nothing special about it at first glance."})-[:IN]->(d)`,
     putPebblesInBox:
         `
-        MATCH (b {name: "Box"})
+        MATCH (b:Box)
         UNWIND range(1,1000) as iterator
         CREATE (p:Pebble {description:"Another man's treasure"})-[:IN]->(b)
         RETURN *`,
