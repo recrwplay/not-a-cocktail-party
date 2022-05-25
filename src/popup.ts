@@ -5,8 +5,8 @@ let popup: HTMLDivElement | null = null;
 let currentPopupId: any = null;
 
 window.addEventListener('mousemove', (e) => {
-  mousePos.x = e.clientX;
-  mousePos.y = e.clientY;
+  mousePos.x = e.pageX;
+  mousePos.y = e.pageY;
 })
 
 document.body.addEventListener('click', (e) => {
@@ -28,7 +28,7 @@ document.body.addEventListener('click', (e) => {
   }
 });
 
-const despawnPopup = () => {
+export const despawnPopup = () => {
   popup?.remove();
   popup = null;
   currentPopupId = null;

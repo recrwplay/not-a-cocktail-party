@@ -11,6 +11,7 @@ import { Level2Checker } from "./level2Checker";
 import {map} from "./map";
 import {ShowResults} from "./showResults"
 import { renderGraph } from "./render/graph-renderer";
+import { despawnPopup } from "./popup";
 
 const loginMap=$("#login-map")
 loginMap.innerHTML=map;
@@ -43,6 +44,7 @@ async function loadGame(api: Neo4jAPI){
     const handleRunQueryEvent = async () => {
       if (gameState.loading) return;
 
+      despawnPopup();
       const query = input.value;
       const success = await runQuery(query);
 
