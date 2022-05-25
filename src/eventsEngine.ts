@@ -1,31 +1,33 @@
 import { Neo4jAPI } from "./neo4j_api";
 import { Queries } from "./queries";
+import { GameText } from "./gameText";
 
 export class EventsEngine {
     private events = [
         {
             conditions: [Queries.isLightOn],
             effects: [Queries.createSafe, Queries.createCupboard],
-            effectText: "You turn the light on, the room is nasty"
+            effectText: [GameText.lightIsOn]
         },
         {
             conditions: [Queries.isBottomDrawerOpen],
             effects: [Queries.createBox],
-            effectText: "You opened the bottom drawer and found a box, let's see what's in it."
+            effectText: [GameText.bottomDrawerIsOpen]
         },
         {
             conditions: [Queries.isTopDrawerOpen],
             effects: [],
-            effectText: "Oh this drawer was empty, try opening another one."
+            effectText: [GameText.topDrawerIsOpen]
         },
         {
             conditions: [Queries.isMiddleDrawerOpen],
             effects: [],
-            effectText: "Oh this drawer was empty, try opening another one."
+            effectText: [GameText.middleDrawerIsOpen]
         },
         { conditions: [Queries.isBoxOpen],
             effects:[Queries.createPebbles, Queries.putPebblesInBox],
-            effectText: "You opened the box and it is full of pebbles hiding anything else."}
+            effectText: [GameText.BoxIsOpen]
+        }
 
     ]
 
