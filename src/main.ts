@@ -6,6 +6,7 @@ import { EventsEngine } from "./eventsEngine";
 import {ShowResults} from "./showResults";
 import {config} from "./config"
 import { Node, Relationship } from "./graph";
+import {GameText} from "./gameText"
 
 
 $(".login-button").addEventListener("click", ()=>{
@@ -127,15 +128,14 @@ async function loadGame(api: Neo4jAPI){
       sidebar.prepend(h("p", "error", String(error)));
     }
 
-    const initialMessage="You wake up in a dark room, head throbbing. That was definitely <b>not</b> a cocktail party."
-    addMessageToSidebar(initialMessage);
+    addMessageToSidebar(GameText.initialState);
 
 
     const resetDatabaseButton = $("#reset-button")
     const clueButton = $("#clue-button")
 
     clueButton.addEventListener("click", ()=>{
-        addMessageToSidebar(eventsEngine.clue)
+        addMessageToSidebar(eventsEngine.clueText)
     })
 
     resetDatabaseButton.addEventListener('click', async () => {
@@ -144,6 +144,7 @@ async function loadGame(api: Neo4jAPI){
         setLoading(true);
         await gameSetup.lightSetup();
         eventsEngine.reset();
+        addMessageToSidebar(GameText.resetDatabase);
         addMessageToSidebar("The game state has been reset.");
         setLoading(false);
       }

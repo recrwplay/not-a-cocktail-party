@@ -1,12 +1,13 @@
 import { Neo4jAPI } from "./neo4j_api";
 import { Queries } from "./queries";
 import { GameText } from "./gameText";
+import { ClueText } from "./clueText";
 
 interface Event {
     conditions: string[];
     effects: string[];
     effectText: string;
-    clue: string;
+    clueText: string;
 }
 
 const gameEvents: Event[] = [
@@ -14,31 +15,31 @@ const gameEvents: Event[] = [
         conditions: [Queries.isLightOn],
         effects: [Queries.createSafe, Queries.createCupboard],
         effectText: GameText.lightIsOn,
-        clue: "Look for things in the room",
+        clueText: ClueText.openThings,
     },
     {
         conditions: [Queries.isBottomDrawerOpen],
         effects: [Queries.createBox],
         effectText: GameText.bottomDrawerIsOpen,
-        clue: "Look for things in the room",
+        clueText: ClueText.openBox,
     },
     {
         conditions: [Queries.isTopDrawerOpen],
         effects: [],
         effectText: GameText.topDrawerIsOpen,
-        clue: "Look for things in the room",
+        clueText: ClueText.otherDrawer,
     },
     {
         conditions: [Queries.isMiddleDrawerOpen],
         effects: [],
         effectText: GameText.middleDrawerIsOpen,
-        clue: "Look for things in the room",
+        clueText: ClueText.otherDrawer,
     },
     {
         conditions: [Queries.isBoxOpen],
         effects: [Queries.createPebbles, Queries.putPebblesInBox],
         effectText: GameText.boxIsOpen,
-        clue: "That's rockin'",
+        clueText: ClueText.pebbley,
     }
 ]
 
@@ -48,7 +49,7 @@ export class EventsEngine {
     private events: Event[];
 
     private lastEvent = {
-        clue: "Look the only thing there is, dummy"
+        clueText: ClueText.initial
     }
 
     constructor(api: Neo4jAPI) {
@@ -75,8 +76,8 @@ export class EventsEngine {
         return messages
     }
 
-    public get clue(): string {
-        return this.lastEvent.clue;
+    public get clueText(): string {
+        return this.lastEvent.clueText;
     }
 
 
