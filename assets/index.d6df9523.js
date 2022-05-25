@@ -39,7 +39,7 @@ Error message: `+o.message,Ju)}}function as(e,t,n){if(e.length===0)throw(0,Rt.ne
         CREATE (:MiddleDrawer {open:false, description: "Middle drawer"})-[:IN]->(cupboard)
         CREATE (:BottomDrawer {open:false, description: "Bottom drawer"})-[:IN]->(cupboard)`,createBox:`MATCH (d:BottomDrawer)
         CREATE (:Box {open:false, description: "Just a box. Nothing special about it at first glance."})-[:IN]->(d)`,putPebblesInBox:`
-        MATCH (b {name: "Box"})
+        MATCH (b:Box)
         UNWIND range(1,1000) as iterator
         CREATE (p:Pebble {description:"Another man's treasure"})-[:IN]->(b)
         RETURN *`,putKeyInBox:`
