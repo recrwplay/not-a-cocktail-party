@@ -102,3 +102,7 @@ body {
 .node-header {
   display: flex;
 }
+
+#login-map {
+    padding-top: 20px;    
+}

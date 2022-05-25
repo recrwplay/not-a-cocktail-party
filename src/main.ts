@@ -8,7 +8,11 @@ import {config} from "./config"
 import { Node, Relationship } from "./graph";
 import {GameText} from "./gameText"
 import { Level2Checker } from "./level2Checker";
+import {map} from "./map";
 
+
+const loginMap=$("#login-map")
+loginMap.innerHTML=map;
 
 $(".login-button").addEventListener("click", ()=>{
     $(".login").style.display="none";
