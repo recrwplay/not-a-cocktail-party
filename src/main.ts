@@ -5,6 +5,7 @@ import {GameSetup} from "./gameSetup";
 import { EventsEngine } from "./eventsEngine";
 import {ShowResults} from "./showResults";
 import {config} from "./config"
+import { Node, Relationship } from "./graph";
 
 
 $(".login-button").addEventListener("click", ()=>{
@@ -51,10 +52,13 @@ async function loadGame(api: Neo4jAPI){
         if (result.length > 0) {
           const { nodes, relationships, rawStrings } = parseNeo4jResponse(result);
 
-          const showResults = new ShowResults()
-
-          if (nodes.length)         display.append(h("pre", null, showResults.makeTableFrom(nodes)));
-          if (relationships.length) display.append(h("pre", null, showResults.makeTableFrom(relationships)));
+          for (const node of nodes) display.append(renderNode(node));
+          for (const rel of relationships) display.append(renderRelationship(rel));
+          
+          // This is the ascii table stuff
+          // const showResults = new ShowResults()
+          // if (nodes.length)         display.append(h("pre", null, showResults.makeTableFrom(nodes)));
+          // if (relationships.length) display.append(h("pre", null, showResults.makeTableFrom(relationships)));
           if (rawStrings.length)    display.append(h("pre", null, JSON.stringify(rawStrings, null, '  ')));
         }
 
@@ -155,9 +159,9 @@ const setLoading = (loading: boolean) => {
 }
 
 const parseNeo4jResponse = (result: any[][]) => {
-  const nodes = [];
-  const relationships = [];
-  const rawStrings = [];
+  const nodes: Node[] = [];
+  const relationships: Relationship[] = [];
+  const rawStrings: string[] = [];
 
   for (const group of result) {
       for (const item of group) {
@@ -168,7 +172,7 @@ const parseNeo4jResponse = (result: any[][]) => {
             if (item.__isRelationship__) {
               relationships.push({
                   type: item.type,
-                  ...item.properties,
+                  properties: item.properties,
                   id: item.identity.low,
                   start: item.start.low,
                   end: item.end.low,
@@ -176,7 +180,7 @@ const parseNeo4jResponse = (result: any[][]) => {
             } else if (item.__isNode__) {
               nodes.push({
                   labels: item.labels.join(', '),
-                  ...item.properties,
+                  properties: item.properties,
                   id: item.identity.low,
               });
             }
@@ -189,4 +193,42 @@ const parseNeo4jResponse = (result: any[][]) => {
     relationships,
     rawStrings,
   }
+}
+
+const renderNode = (node: Node) => {
+  const title = `${node.labels}  (id ${node.id})`;
+  const properties = Object.entries(node.properties).map(([key, value]) => `  ${key}:  ${value}`);
+  return renderThing(title, properties);
+};
+
+const renderRelationship = (rel: Relationship) => {
+  // TODO: Figute out how to display a relationship in a meaningful way
+  const title =  `Relationship ${rel.type}  (id ${rel.id})`;
+  const properties = Object.entries(rel.properties).map(([key, value]) => `  ${key}:  ${value}`);
+  return renderThing(title, properties);
+}
+
+
+const renderThing = (title: string, body: string[]) => {
+  const button = h("button", "toggle", "-");
+  // TODO: Figute out how to display a relationship in a meaningful way
+  const properties = h("pre", null, body.join('\n'));
+
+  let open = true;
+
+  const toggle = () => {
+    open = !open;
+    button.textContent = open ? '-' : '+';
+    properties.style.display = open ? 'block' : 'none';
+  }
+  
+  button.addEventListener('click', toggle);
+
+  return h("div", "node",
+    h("div", "node-header",
+      h("pre", null, title),
+      button
+    ),
+    properties
+  );
 }
