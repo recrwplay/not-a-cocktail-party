@@ -18,7 +18,7 @@ const gameEvents: Event[] = [
         conditions: [Queries.isLightOn],
         effects: [Queries.createSafe, Queries.createCupboard],
         effectText: GameText.lightIsOn,
-        clueText: ClueText.openThings
+        clueText: ClueText.openThings,
     },
     {
         conditions: [Queries.isBottomDrawerOpen],

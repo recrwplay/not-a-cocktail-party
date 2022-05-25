@@ -4,7 +4,7 @@ export const Level2Queries =
         initialSetup: `CREATE (hotel:Hotel {name:"Overlook"}),
        (malmöC:TrainStation {name:"Malmö C"}),
        (triangeln:TrainStation {name:"Malmö Triangeln"}),
-       (hylllie:TrainStation {name:"Malmö Hyllie"}),
+       (hyllie:TrainStation {name:"Malmö Hyllie"}),
        (malmöAirport:Airport {name: "Malmö Airport"}),
        (copenhagenAirport:Airport {name:"Copenhagen Airport"}),
        (hotel)-[:WALK {cost:0, currency:"SEK", time:3}]->(malmöC),
@@ -23,9 +23,9 @@ export const Level2Queries =
        (hotel)-[:TAXI {cost:0, currency:"SEK", time:360}]->(malmöAirport),
        (hyllie)-[:TAXI {cost:380, currency:"SEK", time:7}]->(copenhagenAirport)`,
 
-        travelSolution : `MATCH p=(n:Hotel)-[*1..3]->(:Airport {name:"Copenhagen Airport"})
-                        WHERE reduce(totalTime = 0, r IN relationships(p) | totalTime + r.time) < 25
-                        AND reduce(totalCost = 0, r IN relationships(p) | totalCost + r.cost) < 100
-                        RETURN p`,
+        travelSolution : `MATCH solution=(n:Hotel)-[*1..3]->(:Airport {name:"Copenhagen Airport"})
+                        WHERE reduce(totalTime = 0, r IN relationships(solution) | totalTime + r.time) < 25
+                        AND reduce(totalCost = 0, r IN relationships(solution) | totalCost + r.cost) < 100
+                        RETURN solution`,
 
     }

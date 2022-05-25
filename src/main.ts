@@ -59,7 +59,11 @@ async function loadGame(api: Neo4jAPI){
         } else {
             const fullQuery=Level2Checker.getFullQuery(query)
             result=await api.runCypher(fullQuery);
-            console.log(result);
+            if(result.every((s)=>s[0]===true)){
+                addMessageToSidebar("You get to the airport");
+            } else {
+                addMessageToSidebar("You get lost and end up again on the hotel");
+            }
         }
 
         const display = $(".game-display");
