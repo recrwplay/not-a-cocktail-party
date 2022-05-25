@@ -86,6 +86,9 @@ async function loadGame(api: Neo4jAPI){
         if(!eventsEngine.level1Finished){
             // LEVEL 1
             messages=await eventsEngine.checkConditions();
+            if(eventsEngine.level1Finished) {
+                await gameSetup.setupLevel2();
+            }
         }
 
         addQueryToSidebar(query);
